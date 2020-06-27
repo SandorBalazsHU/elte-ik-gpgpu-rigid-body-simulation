@@ -1,5 +1,3 @@
 ﻿  MyApp.cpp
 C:\Users\sabua\Desktop\DEV\elte-ik-gpgpu-rigid-body-simulation\02_Transparency\MyApp.cpp(249,55): warning C4305: 'argument': truncation from 'double' to 'float'
-  main.cpp
-  Generating Code...
   02_Transparency.vcxproj -> C:\Users\sabua\Desktop\DEV\elte-ik-gpgpu-rigid-body-simulation\x64\Debug\02_Transparency.exe
