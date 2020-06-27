@@ -66,7 +66,7 @@ int main(int argc, char* args[])
 
 	// antialiasing - ha kell - nézzük meg, hogy mi lesz a pont-primitívekbõl, hogy ha bekapcsoljuk!
 	//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS,  1);
-	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,  2);
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,  4);
 
 	// hozzuk létre az ablakunkat
 	SDL_Window *win = 0;

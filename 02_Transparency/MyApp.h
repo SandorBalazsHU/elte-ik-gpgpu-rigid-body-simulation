@@ -43,6 +43,15 @@ public:
 	void MouseWheel(SDL_MouseWheelEvent&);
 	void Resize(int, int);
 protected:
+	static const int numberOfBalls = 100;
+	static const int boxSize = 50;
+	float random(float lower, float upper);
+	void ballInit();
+	glm::vec3 positions[numberOfBalls];
+	glm::vec3 velocities[numberOfBalls];
+	glm::vec3 gravity;
+	bool run = false;
+	
 	// shaderekhez szükséges változók
 	ProgramObject		m_program;		// shaderek programja
 
@@ -58,8 +67,6 @@ protected:
 
 	gCamera				m_camera;
 
-	glm::vec4			m_wallColor{ 1 };
-
-	float animation = 1;
+	glm::vec4			m_wallColor = glm::vec4(1,1,1,0.2);
 };
 

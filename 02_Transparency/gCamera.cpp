@@ -6,9 +6,9 @@
 /// <summary>
 /// Initializes a new instance of the <see cref="gCamera"/> class.
 /// </summary>
-gCamera::gCamera(void) : m_eye(0.0f, 20.0f, 20.0f), m_at(0.0f), m_up(0.0f, 1.0f, 0.0f), m_speed(16.0f), m_goFw(0), m_goRight(0), m_eye_sphare(28.28f, 20.0f, 20.0f)
+gCamera::gCamera(void) : m_eye(0.0f, 0.0f, 0.0f), m_at(0.0f), m_up(0.0f, 1.0f, 0.0f), m_speed(16.0f), m_goFw(0), m_goRight(0), m_eye_sphare(150.0f, 20.0f, 20.0f)
 {
-	SetView( glm::vec3(0,20,20), glm::vec3(0,0,0), glm::vec3(0,1,0));
+	SetView( glm::vec3(120,120,120), glm::vec3(0,0,0), glm::vec3(0,1,0));
 
 	m_dist = glm::length( m_at - m_eye );	
 

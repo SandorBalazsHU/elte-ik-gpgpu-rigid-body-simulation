@@ -11,14 +11,41 @@
 
 #include "ObjParser_OGL3.h"
 
+#include <cstdlib>
+#include <ctime>
+
 CMyApp::CMyApp(void)
 {
+	/* initialize random seed: */
+	srand((unsigned int)time(NULL));
+	gravity = glm::vec3(0.0f, 0.001f, 0.0f);
+	ballInit();
 }
 
 
 CMyApp::~CMyApp(void)
 {
 	
+}
+
+float CMyApp::random(float lower, float upper)
+{
+	/* generate secret number between a and b: */
+	float random = lower + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (upper- lower)));
+	//std::cout << random << std::endl;
+	return random;
+}
+
+void CMyApp::ballInit() {
+	int r = 40;
+	float s = 0.2f;
+	for (size_t i = 0; i < numberOfBalls; i++)
+	{
+		//positions[i] = glm::vec3(random(-r,r), random(-r, r), random(-r, r));
+		positions[i] = glm::vec3(0, 50, 0);
+		velocities[i] = glm::vec3(random(-s, s), random(-s, s), random(-s, s));
+		//velocities[i] = glm::vec3(random(-0.1, 0.1), random(-0.1, 0.1), random(-0.1, 0.1));
+	}
 }
 
 bool CMyApp::Init()
@@ -62,7 +89,7 @@ bool CMyApp::Init()
 		2. glBufferData segítségével áttölti a GPU-ra az argumentumban adott tároló értékeit
 
 	*/
-	float size = 20;
+	float size = boxSize;
 	m_gpuBufferPos.BufferData(
 		std::vector<glm::vec3>{
 			//		  X, Y, Z
@@ -169,24 +196,20 @@ void CMyApp::Render()
 
 	m_program.SetTexture("texImage", 0, m_textureMetal);
 	
-	animation += 0.01f;
-	// Suzanne 1
-	glm::mat4 suzanne1World = glm::translate(glm::vec3(animation*-1, 0, 0));
-	m_program.SetUniform("world", suzanne1World);
-	m_program.SetUniform("worldIT", glm::transpose(glm::inverse(suzanne1World)));
-	m_program.SetUniform("MVP", m_camera.GetViewProj()*suzanne1World);
-	m_program.SetUniform("Kd", glm::vec4(1, 0, 0, 1));
+	for (size_t i = 0; i < numberOfBalls; i++)
+	{
+		if (positions[i].y > -boxSize+1 && run) {
+			velocities[i] = velocities[i] - gravity;
+			positions[i] = positions[i] + velocities[i];
+		}
+		glm::mat4 suzanne1World = glm::translate(positions[i]);
+		m_program.SetUniform("world", suzanne1World);
+		m_program.SetUniform("worldIT", glm::transpose(glm::inverse(suzanne1World)));
+		m_program.SetUniform("MVP", m_camera.GetViewProj() * suzanne1World);
+		m_program.SetUniform("Kd", glm::vec4(0.8, 0.8, 0, 1));
+		m_mesh->draw();
+	}
 
-	m_mesh->draw();
-
-	// Suzanne 2
-	glm::mat4 suzanne2World = glm::translate(glm::vec3(animation, 0, 0));
-	m_program.SetUniform("world", suzanne2World);
-	m_program.SetUniform("worldIT", glm::transpose(glm::inverse(suzanne2World)));
-	m_program.SetUniform("MVP", m_camera.GetViewProj() * suzanne2World);
-	m_program.SetUniform("Kd", glm::vec4(0, 1, 0, 1));
-
-	m_mesh->draw();
 
 	// fal
 
@@ -222,8 +245,11 @@ void CMyApp::Render()
 	ImGui::SetNextWindowPos(ImVec2(300, 400), ImGuiSetCond_FirstUseEver);
 	if (ImGui::Begin("Tesztablak"))
 	{
-		ImGui::Text("Fal (RGBA)");
-		ImGui::SliderFloat4("Fal kd", &(m_wallColor[0]), 0, 1);
+		ImGui::Text("Keszitette: Sandor Balazs");
+		ImGui::SliderFloat3("Gravity", &(gravity[0]), 0, 0.1);
+		ImGui::Checkbox("RUN", &run);
+		static int clicked = 0;
+		if (ImGui::Button("Button")) ballInit();
 	}
 	ImGui::End();
 }
