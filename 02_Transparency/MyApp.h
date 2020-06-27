@@ -49,7 +49,7 @@ protected:
 	float random(float lower, float upper);
 	void ballInit();
 	void wallCollision(glm::vec3& position, glm::vec3& velocity);
-	void ballCollision();
+	void ballCollision(size_t i);
 	glm::vec3 positions[numberOfBalls];
 	glm::vec3 velocities[numberOfBalls];
 	float veight[numberOfBalls];

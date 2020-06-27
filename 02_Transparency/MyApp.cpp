@@ -206,22 +206,20 @@ void CMyApp::wallCollision(glm::vec3& position, glm::vec3& velocity)
 		//if (glm::length(velocity) > 0.01f) velocity = newVelocity;
 	}
 }
-void CMyApp::ballCollision()
+
+void CMyApp::ballCollision(size_t i)
 {
-	for (size_t i = 0; i < numberOfBalls; i++)
+	for (size_t j = 0; j < numberOfBalls; j++)
 	{
-		for (size_t j = 0; j < numberOfBalls; j++)
+		if (i == j) continue;
+		float distance = glm::distance(positions[i], positions[j]);
+		if (distance <= 2.0f)
 		{
-			if (i == j) continue;
-			float distance = glm::distance(positions[i], positions[j]);
-			if (distance <= 2.0f)
-			{
-				//std::cout << "COLLISION " << i << "," << j << std::endl;
-				glm::vec3 n = (positions[i] - positions[j]) / abs(positions[i] - positions[j]);
-				glm::vec3 normal = ((velocities[i] - velocities[j]) * n) * n;
-				velocities[i] = velocities[i] - normal;
-				velocities[j] = velocities[j] + normal;
-			}
+			//std::cout << "COLLISION " << i << "," << j << std::endl;
+			glm::vec3 n = (positions[i] - positions[j]) / abs(positions[i] - positions[j]);
+			glm::vec3 normal = ((velocities[i] - velocities[j]) * n) * n;
+			velocities[i] = velocities[i] - normal;
+			velocities[j] = velocities[j] + normal;
 		}
 	}
 }
@@ -237,7 +235,6 @@ void CMyApp::Render()
 	m_program.SetTexture("texImage", 0, m_textureMetal);
 	
 	//------------------------------------------------------------------------------
-	if(ballCollisionRun) ballCollision();
 	for (size_t i = 0; i < numberOfBalls; i++)
 	{
 		//security border -22 TODO:REMOVE
@@ -246,6 +243,7 @@ void CMyApp::Render()
 		{
 				velocities[i] = velocities[i] * resistance - gravity;
 				wallCollision(positions[i], velocities[i]);
+				if (ballCollisionRun) ballCollision(i);
 				positions[i] = positions[i] + velocities[i];
 		}
 		glm::mat4 suzanne1World = glm::translate(positions[i]);
