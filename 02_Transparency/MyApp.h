@@ -42,14 +42,18 @@ public:
 	void MouseUp(SDL_MouseButtonEvent&);
 	void MouseWheel(SDL_MouseWheelEvent&);
 	void Resize(int, int);
+	float fps[100] = { 0.0f };
 protected:
 	static const int numberOfBalls = 100;
 	static const int boxSize = 50;
 	float random(float lower, float upper);
 	void ballInit();
+	void wallCollision();
 	glm::vec3 positions[numberOfBalls];
 	glm::vec3 velocities[numberOfBalls];
 	glm::vec3 gravity;
+	float resistance;
+	float ballInitSpeed;
 	bool run = false;
 	
 	// shaderekhez szükséges változók

@@ -16,9 +16,10 @@
 
 CMyApp::CMyApp(void)
 {
-	/* initialize random seed: */
 	srand((unsigned int)time(NULL));
 	gravity = glm::vec3(0.0f, 0.006f, 0.0f);
+	resistance = 0.995f;
+	ballInitSpeed = 0.2f;
 	ballInit();
 }
 
@@ -38,12 +39,13 @@ float CMyApp::random(float lower, float upper)
 
 void CMyApp::ballInit() {
 	int r = 40;
-	float s = 0.2f;
 	for (size_t i = 0; i < numberOfBalls; i++)
 	{
 		//positions[i] = glm::vec3(random(-r,r), random(-r, r), random(-r, r));
-		positions[i] = glm::vec3(0, 50, 0);
-		velocities[i] = glm::vec3(random(-s, s), random(-s, s), random(-s, s));
+		positions[i] = glm::vec3(0, 30, 0);
+		velocities[i] = glm::vec3(random(-ballInitSpeed, ballInitSpeed),
+								  random(-ballInitSpeed, ballInitSpeed),
+								  random(-ballInitSpeed, ballInitSpeed));
 		//velocities[i] = glm::vec3(random(-0.1, 0.1), random(-0.1, 0.1), random(-0.1, 0.1));
 	}
 }
@@ -186,6 +188,24 @@ void CMyApp::Update()
 	last_time = SDL_GetTicks();
 }
 
+void CMyApp::wallCollision()
+{
+	for (size_t i = 0; i < numberOfBalls; i++)
+	{
+		glm::vec3 normal = glm::vec3(0, 0, 0);
+
+		if (positions[i].y < -boxSize + 1) normal = glm::vec3(0,  1, 0);
+		if (positions[i].y > boxSize - 1)  normal = glm::vec3(0, -1, 0);
+		if (positions[i].x < -boxSize - 1) normal = glm::vec3(1,  0, 0);
+		if (positions[i].x > boxSize - 1)  normal = glm::vec3(-1, 0, 0);
+		if (positions[i].z < -boxSize - 1) normal = glm::vec3(0,  0, 1);
+		if (positions[i].z > boxSize - 1)  normal = glm::vec3(0,  0, -1);
+
+		if(normal != glm::vec3(0, 0, 0))
+			velocities[i] = velocities[i] - 2.0f * (velocities[i] * normal) * normal;
+	}
+}
+
 void CMyApp::Render()
 {
 	// töröljük a frampuffert (GL_COLOR_BUFFER_BIT) és a mélységi Z puffert (GL_DEPTH_BUFFER_BIT)
@@ -196,10 +216,13 @@ void CMyApp::Render()
 
 	m_program.SetTexture("texImage", 0, m_textureMetal);
 	
+	//------------------------------------------------------------------------------
+	wallCollision();
 	for (size_t i = 0; i < numberOfBalls; i++)
 	{
-		if (positions[i].y > -boxSize+1 && run) {
-			velocities[i] = velocities[i] - gravity;
+		//security border -22 TODO:REMOVE
+		if (positions[i].y > -boxSize-22 && run) {
+			velocities[i] = velocities[i]*resistance - gravity;
 			positions[i] = positions[i] + velocities[i];
 		}
 		glm::mat4 suzanne1World = glm::translate(positions[i]);
@@ -237,19 +260,24 @@ void CMyApp::Render()
 	// UI
 	//
 	// A következő parancs megnyit egy ImGui tesztablakot és így látszik mit tud az ImGui.
-	//ImGui::ShowTestWindow();
+	// ImGui::ShowTestWindow();
 	// A ImGui::ShowTestWindow implementációja az imgui_demo.cpp-ben található
 	// Érdemes még az imgui.h-t böngészni, valamint az imgui.cpp elején a FAQ-ot elolvasni.
 	// Rendes dokumentáció nincs, de a fentiek elegendőek kell legyenek.
 
-	ImGui::SetNextWindowPos(ImVec2(300, 400), ImGuiSetCond_FirstUseEver);
-	if (ImGui::Begin("Tesztablak"))
+	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(500, 250), ImGuiCond_FirstUseEver);
+	if (ImGui::Begin("Rigid Body Simulation"))
 	{
-		ImGui::Text("Keszitette: Sandor Balazs");
+		ImGui::Text("Rigid Body Simulation");
+		ImGui::Text("By: Sandor Balazs");
+		ImGui::PlotLines("FPS", fps, IM_ARRAYSIZE(fps),0, "FPS", 0.0f, 100.0f, ImVec2(0, 80));
 		ImGui::SliderFloat3("Gravity", &(gravity[0]), 0, 0.1);
+		ImGui::SliderFloat("Resistance", &(resistance), 0.9, 1);
+		ImGui::SliderFloat("ballInitSpeed", &(ballInitSpeed), 0, 1);
 		ImGui::Checkbox("RUN", &run);
 		static int clicked = 0;
-		if (ImGui::Button("Button")) ballInit();
+		if (ImGui::Button("START")) ballInit();
 	}
 	ImGui::End();
 }

@@ -126,10 +126,6 @@ int main(int argc, char* args[])
 		return 1;
 	}
 
-	std::stringstream window_title;
-	window_title << "OpenGL " << glVersion[0] << "." << glVersion[1];
-	SDL_SetWindowTitle(win, window_title.str().c_str());
-
 	//
 	// 3. lépés: indítsuk el a fõ üzenetfeldolgozó ciklust
 	// 
@@ -150,8 +146,13 @@ int main(int argc, char* args[])
 			return 1;
 		}
 
+		int fpsPlotCounter = 0;
 		while (!quit)
 		{
+			fpsPlotCounter++;
+			if (fpsPlotCounter == 100) fpsPlotCounter = 0;
+			const Uint32 time = SDL_GetTicks();
+
 			// amíg van feldolgozandó üzenet dolgozzuk fel mindet:
 			while (SDL_PollEvent(&ev))
 			{
@@ -206,6 +207,14 @@ int main(int argc, char* args[])
 			ImGui::Render();
 
 			SDL_GL_SwapWindow(win);
+
+
+			const Uint32 last_time = SDL_GetTicks();
+			std::stringstream window_title;
+			float fps = 1000.0f / (last_time - time);
+			window_title << "Rigid Body Simulation. FPS: " << fps;
+			app.fps[fpsPlotCounter] = fps;
+			SDL_SetWindowTitle(win, window_title.str().c_str());
 		}
 
 		// takarítson el maga után az objektumunk
