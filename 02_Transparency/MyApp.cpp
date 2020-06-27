@@ -42,10 +42,11 @@ void CMyApp::ballInit() {
 	for (size_t i = 0; i < numberOfBalls; i++)
 	{
 		//positions[i] = glm::vec3(random(-r,r), random(-r, r), random(-r, r));
-		positions[i] = glm::vec3(0, 30, 0);
+		positions[i] = glm::vec3(0, 5, 0);
 		velocities[i] = glm::vec3(random(-ballInitSpeed, ballInitSpeed),
 								  random(-ballInitSpeed, ballInitSpeed),
 								  random(-ballInitSpeed, ballInitSpeed));
+		veight[i] = 1.0f;
 		//velocities[i] = glm::vec3(random(-0.1, 0.1), random(-0.1, 0.1), random(-0.1, 0.1));
 	}
 }
@@ -205,6 +206,28 @@ void CMyApp::wallCollision()
 			velocities[i] = velocities[i] - 2.0f * (velocities[i] * normal) * normal;
 	}
 }
+void CMyApp::ballCollision()
+{
+	for (size_t i = 0; i < numberOfBalls; i++)
+	{
+		for (size_t j = 0; j < numberOfBalls; j++)
+		{
+			if (i == j) continue;
+			float distance = sqrt(pow((positions[j].x - positions[i].x), 2.0f)
+								+ pow((positions[j].y - positions[i].y), 2.0f)
+								+ pow((positions[j].z - positions[i].z), 2.0f));
+			if (distance <= 2.0f)
+			{
+				glm::vec3 outI = (velocities[i]*(veight[i]-veight[j])+2.0f*veight[j]* velocities[j])
+								/(veight[i] - veight[j]);
+				glm::vec3 outJ = (velocities[j] * (veight[j] - veight[i]) + 2.0f * veight[i] * velocities[i])
+								/(veight[i] - veight[j]);
+				velocities[i] = outI;
+				velocities[j] = outJ;
+			}
+		}
+	}
+}
 
 void CMyApp::Render()
 {
@@ -218,6 +241,7 @@ void CMyApp::Render()
 	
 	//------------------------------------------------------------------------------
 	wallCollision();
+	if(ballCollisionRun) ballCollision();
 	for (size_t i = 0; i < numberOfBalls; i++)
 	{
 		//security border -22 TODO:REMOVE
@@ -266,7 +290,7 @@ void CMyApp::Render()
 	// Rendes dokumentáció nincs, de a fentiek elegendőek kell legyenek.
 
 	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);
-	ImGui::SetNextWindowSize(ImVec2(500, 250), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(500, 240), ImGuiCond_FirstUseEver);
 	if (ImGui::Begin("Rigid Body Simulation"))
 	{
 		ImGui::Text("Rigid Body Simulation");
@@ -276,6 +300,7 @@ void CMyApp::Render()
 		ImGui::SliderFloat("Resistance", &(resistance), 0.9, 1);
 		ImGui::SliderFloat("ballInitSpeed", &(ballInitSpeed), 0, 1);
 		ImGui::Checkbox("RUN", &run);
+		ImGui::Checkbox("Collision", &ballCollisionRun);
 		static int clicked = 0;
 		if (ImGui::Button("START")) ballInit();
 	}

@@ -44,17 +44,20 @@ public:
 	void Resize(int, int);
 	float fps[100] = { 0.0f };
 protected:
-	static const int numberOfBalls = 100;
-	static const int boxSize = 50;
+	static const int numberOfBalls = 10;
+	static const int boxSize = 10;
 	float random(float lower, float upper);
 	void ballInit();
 	void wallCollision();
+	void ballCollision();
 	glm::vec3 positions[numberOfBalls];
 	glm::vec3 velocities[numberOfBalls];
+	float veight[numberOfBalls];
 	glm::vec3 gravity;
 	float resistance;
 	float ballInitSpeed;
 	bool run = false;
+	bool ballCollisionRun = false;
 	
 	// shaderekhez szükséges változók
 	ProgramObject		m_program;		// shaderek programja
