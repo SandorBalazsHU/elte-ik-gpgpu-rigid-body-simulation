@@ -17,8 +17,8 @@
 CMyApp::CMyApp(void)
 {
 	srand((unsigned int)time(NULL));
-	gravity = glm::vec3(0.0f, 0.006f, 0.0f);
-	resistance = 0.995f;
+	gravity = glm::vec3(0.0f, -1.006f, 0.0f);
+	resistance = 0.996f;
 	ballInitSpeed = 0.2f;
 	ballInit();
 }
@@ -42,7 +42,7 @@ void CMyApp::ballInit() {
 	for (size_t i = 0; i < numberOfBalls; i++)
 	{
 		//positions[i] = glm::vec3(random(-r,r), random(-r, r), random(-r, r));
-		positions[i] = glm::vec3(0, 5, 0);
+		positions[i] = glm::vec3(0, 2, 0);
 		velocities[i] = glm::vec3(random(-ballInitSpeed, ballInitSpeed),
 								  random(-ballInitSpeed, ballInitSpeed),
 								  random(-ballInitSpeed, ballInitSpeed));
@@ -189,21 +189,21 @@ void CMyApp::Update()
 	last_time = SDL_GetTicks();
 }
 
-void CMyApp::wallCollision()
+void CMyApp::wallCollision(glm::vec3& position, glm::vec3& velocity)
 {
-	for (size_t i = 0; i < numberOfBalls; i++)
+	glm::vec3 normal = glm::vec3(0.0f, 0.0f, 0.0f);
+
+	if (position.y <= -boxSize + 1.1f) normal = glm::vec3(0.0f,  1.0f, 0.0f);
+	if (position.y >= boxSize - 1.1f)  normal = glm::vec3(0.0f, -1.0f, 0.0f);
+	if (position.x <= -boxSize + 1.1f) normal = glm::vec3(1.0f,  0.0f, 0.0f);
+	if (position.x >= boxSize - 1.1f)  normal = glm::vec3(-1.0f, 0.0f, 0.0f);
+	if (position.z <= -boxSize + 1.1f) normal = glm::vec3(0.0f,  0.0f, 1.0f);
+	if (position.z >= boxSize - 1.1f)  normal = glm::vec3(0.0f,  0.0f, -1.0f);
+		
+	if (normal != glm::vec3(0.0f, 0.0f, 0.0f))
 	{
-		glm::vec3 normal = glm::vec3(0, 0, 0);
-
-		if (positions[i].y < -boxSize + 1) normal = glm::vec3(0,  1, 0);
-		if (positions[i].y > boxSize - 1)  normal = glm::vec3(0, -1, 0);
-		if (positions[i].x < -boxSize - 1) normal = glm::vec3(1,  0, 0);
-		if (positions[i].x > boxSize - 1)  normal = glm::vec3(-1, 0, 0);
-		if (positions[i].z < -boxSize - 1) normal = glm::vec3(0,  0, 1);
-		if (positions[i].z > boxSize - 1)  normal = glm::vec3(0,  0, -1);
-
-		if(normal != glm::vec3(0, 0, 0))
-			velocities[i] = velocities[i] - 2.0f * (velocities[i] * normal) * normal;
+		velocity = glm::reflect(velocity, normal);
+		//if (glm::length(velocity) > 0.01f) velocity = newVelocity;
 	}
 }
 void CMyApp::ballCollision()
@@ -213,17 +213,14 @@ void CMyApp::ballCollision()
 		for (size_t j = 0; j < numberOfBalls; j++)
 		{
 			if (i == j) continue;
-			float distance = sqrt(pow((positions[j].x - positions[i].x), 2.0f)
-								+ pow((positions[j].y - positions[i].y), 2.0f)
-								+ pow((positions[j].z - positions[i].z), 2.0f));
+			float distance = glm::distance(positions[i], positions[j]);
 			if (distance <= 2.0f)
 			{
-				glm::vec3 outI = (velocities[i]*(veight[i]-veight[j])+2.0f*veight[j]* velocities[j])
-								/(veight[i] - veight[j]);
-				glm::vec3 outJ = (velocities[j] * (veight[j] - veight[i]) + 2.0f * veight[i] * velocities[i])
-								/(veight[i] - veight[j]);
-				velocities[i] = outI;
-				velocities[j] = outJ;
+				//std::cout << "COLLISION " << i << "," << j << std::endl;
+				glm::vec3 n = (positions[i] - positions[j]) / abs(positions[i] - positions[j]);
+				glm::vec3 normal = ((velocities[i] - velocities[j]) * n) * n;
+				velocities[i] = velocities[i] - normal;
+				velocities[j] = velocities[j] + normal;
 			}
 		}
 	}
@@ -240,14 +237,16 @@ void CMyApp::Render()
 	m_program.SetTexture("texImage", 0, m_textureMetal);
 	
 	//------------------------------------------------------------------------------
-	wallCollision();
 	if(ballCollisionRun) ballCollision();
 	for (size_t i = 0; i < numberOfBalls; i++)
 	{
 		//security border -22 TODO:REMOVE
-		if (positions[i].y > -boxSize-22 && run) {
-			velocities[i] = velocities[i]*resistance - gravity;
-			positions[i] = positions[i] + velocities[i];
+		//if (glm::length(velocities[i]) >= 0.02f && run)
+		if (run)
+		{
+				velocities[i] = velocities[i] * resistance - gravity;
+				wallCollision(positions[i], velocities[i]);
+				positions[i] = positions[i] + velocities[i];
 		}
 		glm::mat4 suzanne1World = glm::translate(positions[i]);
 		m_program.SetUniform("world", suzanne1World);
@@ -296,9 +295,9 @@ void CMyApp::Render()
 		ImGui::Text("Rigid Body Simulation");
 		ImGui::Text("By: Sandor Balazs");
 		ImGui::PlotLines("FPS", fps, IM_ARRAYSIZE(fps),0, "FPS", 0.0f, 100.0f, ImVec2(0, 80));
-		ImGui::SliderFloat3("Gravity", &(gravity[0]), 0, 0.1);
-		ImGui::SliderFloat("Resistance", &(resistance), 0.9, 1);
-		ImGui::SliderFloat("ballInitSpeed", &(ballInitSpeed), 0, 1);
+		ImGui::SliderFloat3("Gravity", &(gravity[0]), 0.0f, 0.1f);
+		ImGui::SliderFloat("Resistance", &(resistance), 0.9f, 1.0f);
+		ImGui::SliderFloat("ballInitSpeed", &(ballInitSpeed), 0.0f, 1.0f);
 		ImGui::Checkbox("RUN", &run);
 		ImGui::Checkbox("Collision", &ballCollisionRun);
 		static int clicked = 0;

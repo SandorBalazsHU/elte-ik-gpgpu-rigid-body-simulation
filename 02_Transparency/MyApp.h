@@ -44,11 +44,11 @@ public:
 	void Resize(int, int);
 	float fps[100] = { 0.0f };
 protected:
-	static const int numberOfBalls = 10;
-	static const int boxSize = 10;
+	static const int numberOfBalls = 2;
+	static const int boxSize = 5;
 	float random(float lower, float upper);
 	void ballInit();
-	void wallCollision();
+	void wallCollision(glm::vec3& position, glm::vec3& velocity);
 	void ballCollision();
 	glm::vec3 positions[numberOfBalls];
 	glm::vec3 velocities[numberOfBalls];
