@@ -17,7 +17,7 @@
 CMyApp::CMyApp(void)
 {
 	srand((unsigned int)time(NULL));
-	gravity = glm::vec3(0.0f, -1.006f, 0.0f);
+	gravity = glm::vec3(0.0f, 0.006f, 0.0f);
 	resistance = 0.996f;
 	ballInitSpeed = 0.2f;
 	ballInit();

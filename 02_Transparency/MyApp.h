@@ -44,7 +44,7 @@ public:
 	void Resize(int, int);
 	float fps[100] = { 0.0f };
 protected:
-	static const int numberOfBalls = 2;
+	static const int numberOfBalls = 6;
 	static const int boxSize = 5;
 	float random(float lower, float upper);
 	void ballInit();
