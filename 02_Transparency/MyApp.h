@@ -44,16 +44,18 @@ public:
 	void Resize(int, int);
 	float fps[100] = { 0.0f };
 protected:
-	static const int numberOfBalls = 30;
+	int numberOfBalls = 40;
+	static const int numberOfBallsArray = 1500;
 	float boxSize;
 	float random(float lower, float upper);
 	void ballInit();
+	void WallBuild();
 	void wallCollision(glm::vec3& position, glm::vec3& velocity);
 	void ballCollision(size_t i);
-	glm::vec3 positions[numberOfBalls];
-	glm::vec3 velocities[numberOfBalls];
-	glm::vec4 colors[numberOfBalls];
-	bool collChech[numberOfBalls];
+	glm::vec3 positions[numberOfBallsArray];
+	glm::vec3 velocities[numberOfBallsArray];
+	glm::vec4 colors[numberOfBallsArray];
+	bool collChech[numberOfBallsArray];
 	glm::vec3 gravity;
 	float resistance;
 	float ballInitSpeed;

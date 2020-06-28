@@ -20,7 +20,7 @@ CMyApp::CMyApp(void)
 	gravity = glm::vec3(0.0f, 0.006f, 0.0f);
 	resistance = 0.996f;
 	ballInitSpeed = 0.2f;
-	boxSize = 8.0f;
+	boxSize = 15.0f;
 	ballInit();
 }
 
@@ -95,87 +95,7 @@ bool CMyApp::Init()
 		{ 2, "vs_out_tex0" },				// VAO 2-es csatorna menjen a vs_in_tex0-ba
 	});
 
-	//
-	// geometria definiálása (std::vector<...>) és GPU pufferekbe (m_buffer*) való feltöltése BufferData-val
-	//
-
-	// vertexek pozíciói:
-	/*
-	Az m_gpuBufferPos konstruktora már létrehozott egy GPU puffer azonosítót és a most következő BufferData hívás ezt 
-		1. bind-olni fogja GL_ARRAY_BUFFER target-re (hiszen m_gpuBufferPos típusa ArrayBuffer) és
-		2. glBufferData segítségével áttölti a GPU-ra az argumentumban adott tároló értékeit
-
-	*/
-	float size = boxSize;
-	m_gpuBufferPos.BufferData(
-		std::vector<glm::vec3>{
-			//		  X, Y, Z
-			glm::vec3(-size,-size,-size),	// 0-ás csúcspont
-			glm::vec3(size, -size, -size), // 1-es
-			glm::vec3(-size,-size, size), // 2-es
-			glm::vec3(size, -size, size),  // 3-as
-			glm::vec3(-size, size, -size),	// 0-ás csúcspont
-			glm::vec3(size, size, -size), // 1-es
-			glm::vec3(size, size, size), // 2-es
-			glm::vec3(-size, size, size)  // 3-as
-		}
-	);
-
-	// normálisai
-	m_gpuBufferNormal.BufferData(
-		std::vector<glm::vec3>{
-			// normal.X,.Y,.Z
-			glm::vec3(0, 1, 0), // 0-ás csúcspont
-			glm::vec3(0, 1, 0), // 1-es
-			glm::vec3(0, 1, 0), // 2-es
-			glm::vec3(0, 1, 0),  // 3-as
-			glm::vec3(0, 1, 0), // 0-ás csúcspont
-			glm::vec3(0, 1, 0), // 1-es
-			glm::vec3(0, 1, 0), // 2-es
-			glm::vec3(0, 1, 0)  // 3-as
-		}
-	);
-
-	// textúrakoordinátái
-	m_gpuBufferTex.BufferData(
-		std::vector<glm::vec2>{
-			//        u, v
-			glm::vec2(0, 0), // 0-ás csúcspont
-			glm::vec2(1, 0), // 1-es
-			glm::vec2(0, 1), // 2-es
-			glm::vec2(1, 1), // 3-as
-			glm::vec2(0, 0), // 0-ás csúcspont
-			glm::vec2(1, 0), // 1-es
-			glm::vec2(0, 1), // 2-es
-			glm::vec2(1, 1)	 // 3-as
-		}
-	);
-
-	// és a primitíveket alkotó csúcspontok indexei (az előző tömbökből) - triangle list-el való kirajzolásra felkészülve
-	m_gpuBufferIndices.BufferData(
-		std::vector<int>{
-			0,1,2,	// 1. háromszög: 0-1-2 csúcspontokból
-			2,1,3,	// 2. háromszög: 2-1-3 csúcspontokból
-			2,0,4,
-			4,7,2,
-			4,0,1,
-			4,5,1,
-			3,1,5,
-			3,6,5,
-			2,3,6,
-			2,6,7
-		}
-	);
-
-	// geometria VAO-ban való regisztrálása
-	m_vao.Init(
-		{
-			{ CreateAttribute<0, glm::vec3, 0, sizeof(glm::vec3)>, m_gpuBufferPos },	// 0-ás attribútum "lényegében" glm::vec3-ak sorozata és az adatok az m_gpuBufferPos GPU pufferben vannak
-			{ CreateAttribute<1, glm::vec3, 0, sizeof(glm::vec3)>, m_gpuBufferNormal },	// 1-es attribútum "lényegében" glm::vec3-ak sorozata és az adatok az m_gpuBufferNormal GPU pufferben vannak
-			{ CreateAttribute<2, glm::vec2, 0, sizeof(glm::vec2)>, m_gpuBufferTex }		// 2-es attribútum "lényegében" glm::vec2-ők sorozata és az adatok az m_gpuBufferTex GPU pufferben vannak
-		},
-		m_gpuBufferIndices
-	);
+	WallBuild();
 
 	// textúra betöltése
 	m_textureMetal.FromFile("texture.png");
@@ -187,6 +107,91 @@ bool CMyApp::Init()
 	m_camera.SetProj(45.0f, 640.0f / 480.0f, 0.01f, 1000.0f);
 
 	return true;
+}
+
+void CMyApp::WallBuild()
+{
+	//
+// geometria definiálása (std::vector<...>) és GPU pufferekbe (m_buffer*) való feltöltése BufferData-val
+//
+
+// vertexek pozíciói:
+/*
+Az m_gpuBufferPos konstruktora már létrehozott egy GPU puffer azonosítót és a most következő BufferData hívás ezt
+	1. bind-olni fogja GL_ARRAY_BUFFER target-re (hiszen m_gpuBufferPos típusa ArrayBuffer) és
+	2. glBufferData segítségével áttölti a GPU-ra az argumentumban adott tároló értékeit
+
+*/
+	float size = boxSize;
+	m_gpuBufferPos.BufferData(
+		std::vector<glm::vec3>{
+		//		  X, Y, Z
+		glm::vec3(-size, -size, -size),	// 0-ás csúcspont
+			glm::vec3(size, -size, -size), // 1-es
+			glm::vec3(-size, -size, size), // 2-es
+			glm::vec3(size, -size, size),  // 3-as
+			glm::vec3(-size, size, -size),	// 0-ás csúcspont
+			glm::vec3(size, size, -size), // 1-es
+			glm::vec3(size, size, size), // 2-es
+			glm::vec3(-size, size, size)  // 3-as
+	}
+	);
+
+	// normálisai
+	m_gpuBufferNormal.BufferData(
+		std::vector<glm::vec3>{
+		// normal.X,.Y,.Z
+		glm::vec3(0, 1, 0), // 0-ás csúcspont
+			glm::vec3(0, 1, 0), // 1-es
+			glm::vec3(0, 1, 0), // 2-es
+			glm::vec3(0, 1, 0),  // 3-as
+			glm::vec3(0, 1, 0), // 0-ás csúcspont
+			glm::vec3(0, 1, 0), // 1-es
+			glm::vec3(0, 1, 0), // 2-es
+			glm::vec3(0, 1, 0)  // 3-as
+	}
+	);
+
+	// textúrakoordinátái
+	m_gpuBufferTex.BufferData(
+		std::vector<glm::vec2>{
+		//        u, v
+		glm::vec2(0, 0), // 0-ás csúcspont
+			glm::vec2(1, 0), // 1-es
+			glm::vec2(0, 1), // 2-es
+			glm::vec2(1, 1), // 3-as
+			glm::vec2(0, 0), // 0-ás csúcspont
+			glm::vec2(1, 0), // 1-es
+			glm::vec2(0, 1), // 2-es
+			glm::vec2(1, 1)	 // 3-as
+	}
+	);
+
+	// és a primitíveket alkotó csúcspontok indexei (az előző tömbökből) - triangle list-el való kirajzolásra felkészülve
+	m_gpuBufferIndices.BufferData(
+		std::vector<int>{
+		0, 1, 2,	// 1. háromszög: 0-1-2 csúcspontokból
+			2, 1, 3,	// 2. háromszög: 2-1-3 csúcspontokból
+			2, 0, 4,
+			4, 7, 2,
+			4, 0, 1,
+			4, 5, 1,
+			3, 1, 5,
+			3, 6, 5,
+			2, 3, 6,
+			2, 6, 7
+	}
+	);
+
+	// geometria VAO-ban való regisztrálása
+	m_vao.Init(
+		{
+			{ CreateAttribute<0, glm::vec3, 0, sizeof(glm::vec3)>, m_gpuBufferPos },	// 0-ás attribútum "lényegében" glm::vec3-ak sorozata és az adatok az m_gpuBufferPos GPU pufferben vannak
+			{ CreateAttribute<1, glm::vec3, 0, sizeof(glm::vec3)>, m_gpuBufferNormal },	// 1-es attribútum "lényegében" glm::vec3-ak sorozata és az adatok az m_gpuBufferNormal GPU pufferben vannak
+			{ CreateAttribute<2, glm::vec2, 0, sizeof(glm::vec2)>, m_gpuBufferTex }		// 2-es attribútum "lényegében" glm::vec2-ők sorozata és az adatok az m_gpuBufferTex GPU pufferben vannak
+		},
+		m_gpuBufferIndices
+	);
 }
 
 void CMyApp::Clean()
@@ -235,6 +240,7 @@ void CMyApp::wallCollision(glm::vec3& position, glm::vec3& velocity)
 	if (normal != glm::vec3(0.0f, 0.0f, 0.0f))
 	{
 		velocity = glm::reflect(velocity, normal);
+		velocity = velocity * (resistance); //Plus resistance
 		//velocity = velocity - 0.005f;
 		//if (glm::length(velocity) > 0.01f) velocity = newVelocity;
 	}
@@ -247,7 +253,7 @@ void CMyApp::ballCollision(size_t i)
 	{
 		if (i != j && collChech[j]) {
 			float distance = glm::distance(positions[i], positions[j]);
-			if (distance <= 2.0f)
+			if (distance < 2.0f)
 			{
 				//Bcouse zero division.
 				if (distance <= 0.1f) {
@@ -261,10 +267,11 @@ void CMyApp::ballCollision(size_t i)
 				glm::vec3 normal = ((velocities[i] - velocities[j]) * n) * n;
 				velocities[i] = velocities[i] - normal;
 				velocities[j] = velocities[j] + normal;
-				//glm::vec3 shit = ((1.1f / glm::normalize(velocities[i])) * velocities[i]);
-				//std::cout << shit.x << "," << shit.y << "," << shit.z <<std::endl;
-				positions[i] = positions[i] + (((2.001f - distance) / glm::length(velocities[i])) * velocities[i]);
-				positions[j] = positions[j] + (((2.001f - distance) / glm::length(velocities[j])) * velocities[j]);
+				velocities[i] = velocities[i] * (resistance * resistance); //Plus resistance
+				velocities[j] = velocities[j] * (resistance * resistance); //Plus resistance
+
+				positions[i] = positions[i] + (((2.0f - distance) / glm::length(velocities[i])) * velocities[i]);
+				positions[j] = positions[j] + (((2.0f - distance) / glm::length(velocities[j])) * velocities[j]);
 			}
 		}
 	}
@@ -345,12 +352,17 @@ void CMyApp::Render()
 		ImGui::SliderFloat3("Gravity", &(gravity[0]), -0.02f, 0.02f);
 		ImGui::SliderFloat("Resistance", &(resistance), 0.9f, 1.0f);
 		ImGui::SliderFloat("ballInitSpeed", &(ballInitSpeed), 0.0f, 1.0f);
+		if (ImGui::SliderFloat("boxSize", &(boxSize), 5.0f, 100.0f)) WallBuild();
+		ImGui::SliderInt("numberOfBalls", &(numberOfBalls), 1, 1499);
 		ImGui::Checkbox("Random XZ", &randomXZ); ImGui::SameLine(150);
 		ImGui::Checkbox("Random Y", &randomY);
 		ImGui::Checkbox("RUN", &run); ImGui::SameLine(150);
 		ImGui::Checkbox("Collision", &ballCollisionRun);
 		static int clicked = 0;
-		if (ImGui::Button("START")) ballInit();
+		if (ImGui::Button("START")) {
+			WallBuild();
+			ballInit();
+		}
 	}
 	ImGui::End();
 }
