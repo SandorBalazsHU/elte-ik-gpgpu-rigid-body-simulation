@@ -44,7 +44,7 @@ public:
 	void Resize(int, int);
 	float fps[100] = { 0.0f };
 protected:
-	static const int numberOfBalls = 120;
+	static const int numberOfBalls = 30;
 	float boxSize;
 	float random(float lower, float upper);
 	void ballInit();
@@ -53,7 +53,7 @@ protected:
 	glm::vec3 positions[numberOfBalls];
 	glm::vec3 velocities[numberOfBalls];
 	glm::vec4 colors[numberOfBalls];
-	float veight[numberOfBalls];
+	bool collChech[numberOfBalls];
 	glm::vec3 gravity;
 	float resistance;
 	float ballInitSpeed;

@@ -1,2 +1,2 @@
 ﻿  MyApp.cpp
-  02_Transparency.vcxproj -> C:\Users\sabua\Desktop\DEV\elte-ik-gpgpu-rigid-body-simulation\x64\Debug\02_Transparency.exe
+C:\Users\sabua\Desktop\DEV\elte-ik-gpgpu-rigid-body-simulation\02_Transparency\MyApp.cpp(225,2): error C2143: syntax error: missing ';' before '}'

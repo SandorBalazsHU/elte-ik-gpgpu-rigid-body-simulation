@@ -20,7 +20,7 @@ CMyApp::CMyApp(void)
 	gravity = glm::vec3(0.0f, 0.006f, 0.0f);
 	resistance = 0.996f;
 	ballInitSpeed = 0.2f;
-	boxSize = 20.0f;
+	boxSize = 8.0f;
 	ballInit();
 }
 
@@ -57,7 +57,7 @@ void CMyApp::ballInit() {
 		velocities[i] = glm::vec3(random(-ballInitSpeed, ballInitSpeed),
 								  random(-ballInitSpeed, ballInitSpeed),
 								  random(-ballInitSpeed, ballInitSpeed));
-		veight[i] = 1.0f;
+		collChech[i] = true;
 		colors[i] = glm::vec4(random(0.0f, 1.0f),
 							  random(0.0f, 1.0f),
 							  random(0.0f, 1.0f), 1);
@@ -207,12 +207,30 @@ void CMyApp::wallCollision(glm::vec3& position, glm::vec3& velocity)
 {
 	glm::vec3 normal = glm::vec3(0.0f, 0.0f, 0.0f);
 
-	if (position.y <= -boxSize + 1.0f) normal = glm::vec3(0.0f,  1.0f, 0.0f);
-	if (position.y >= boxSize - 1.0f)  normal = glm::vec3(0.0f, -1.0f, 0.0f);
-	if (position.x <= -boxSize + 1.0f) normal = glm::vec3(1.0f,  0.0f, 0.0f);
-	if (position.x >= boxSize - 1.0f)  normal = glm::vec3(-1.0f, 0.0f, 0.0f);
-	if (position.z <= -boxSize + 1.0f) normal = glm::vec3(0.0f,  0.0f, 1.0f);
-	if (position.z >= boxSize - 1.0f)  normal = glm::vec3(0.0f,  0.0f, -1.0f);
+	if (position.y <= -boxSize + 1.0f) {
+		normal = glm::vec3(0.0f, 1.0f, 0.0f);
+		position.y = -boxSize + 1.1f;
+	}
+	if (position.y >= boxSize - 1.0f) {
+		normal = glm::vec3(0.0f, -1.0f, 0.0f);
+		position.y = boxSize - 1.1f;
+	}
+	if (position.x <= -boxSize + 1.0f) {
+		normal = glm::vec3(1.0f, 0.0f, 0.0f);
+		position.x = -boxSize + 1.1f;
+	}
+	if (position.x >= boxSize - 1.0f) {
+		normal = glm::vec3(-1.0f, 0.0f, 0.0f);
+		position.x = boxSize - 1.1f;
+	}
+	if (position.z <= -boxSize + 1.0f) {
+		normal = glm::vec3(0.0f, 0.0f, 1.0f);
+		position.z = -boxSize + 1.1f;
+	}
+	if (position.z >= boxSize - 1.0f) {
+		normal = glm::vec3(0.0f, 0.0f, -1.0f);
+		position.z = boxSize - 1.1f;
+	}
 		
 	if (normal != glm::vec3(0.0f, 0.0f, 0.0f))
 	{
@@ -224,19 +242,33 @@ void CMyApp::wallCollision(glm::vec3& position, glm::vec3& velocity)
 
 void CMyApp::ballCollision(size_t i)
 {
+	
 	for (size_t j = 0; j < numberOfBalls; j++)
 	{
-		if (i == j) continue;
-		float distance = glm::distance(positions[i], positions[j]);
-		if (distance <= 2.0f)
-		{
-			//std::cout << "COLLISION " << i << "," << j << std::endl;
-			glm::vec3 n = (positions[i] - positions[j]) / abs(positions[i] - positions[j]);
-			glm::vec3 normal = ((velocities[i] - velocities[j]) * n) * n;
-			velocities[i] = velocities[i] - normal - 0.005f;
-			velocities[j] = velocities[j] + normal + 0.005f;
+		if (i != j && collChech[j]) {
+			float distance = glm::distance(positions[i], positions[j]);
+			if (distance <= 2.0f)
+			{
+				//Bcouse zero division.
+				if (distance <= 0.1f) {
+					//positions[i] = positions[i] + ((2.1f / glm::normalize(velocities[i])) * velocities[i]);
+					//positions[j] = positions[j] + ((2.1f / glm::normalize(velocities[j])) * velocities[j]);
+					positions[i] = positions[i] + velocities[i];
+					positions[j] = positions[j] + velocities[j];
+				}
+				//std::cout << "COLLISION " << i << "," << j << std::endl;
+				glm::vec3 n = (positions[i] - positions[j]) / abs(positions[i] - positions[j]);
+				glm::vec3 normal = ((velocities[i] - velocities[j]) * n) * n;
+				velocities[i] = velocities[i] - normal;
+				velocities[j] = velocities[j] + normal;
+				//glm::vec3 shit = ((1.1f / glm::normalize(velocities[i])) * velocities[i]);
+				//std::cout << shit.x << "," << shit.y << "," << shit.z <<std::endl;
+				positions[i] = positions[i] + (((2.001f - distance) / glm::length(velocities[i])) * velocities[i]);
+				positions[j] = positions[j] + (((2.001f - distance) / glm::length(velocities[j])) * velocities[j]);
+			}
 		}
 	}
+	collChech[i] = false;
 }
 
 void CMyApp::Render()
@@ -256,10 +288,11 @@ void CMyApp::Render()
 		//if (glm::length(velocities[i]) >= 0.02f && run)
 		if (run)
 		{
-				velocities[i] = (velocities[i] - gravity) * resistance;
-				wallCollision(positions[i], velocities[i]);
-				if (ballCollisionRun) ballCollision(i);
-				positions[i] = positions[i] + velocities[i];
+			velocities[i] = velocities[i] - gravity;
+			velocities[i] = velocities[i] * resistance;
+			positions[i]  = positions[i]  + velocities[i];
+			if (ballCollisionRun) ballCollision(i);
+			wallCollision(positions[i], velocities[i]);
 		}
 		glm::mat4 suzanne1World = glm::translate(positions[i]);
 		m_program.SetUniform("world", suzanne1World);
@@ -268,6 +301,7 @@ void CMyApp::Render()
 		m_program.SetUniform("Kd", colors[i]);
 		m_mesh->draw();
 	}
+	for (size_t i = 0; i < numberOfBalls; i++) collChech[i] = true;
 
 
 	// fal
@@ -308,7 +342,7 @@ void CMyApp::Render()
 		ImGui::Text("Rigid Body Simulation");
 		ImGui::Text("By: Sandor Balazs");
 		ImGui::PlotLines("FPS", fps, IM_ARRAYSIZE(fps),0, "FPS", 0.0f, 100.0f, ImVec2(0, 80));
-		ImGui::SliderFloat3("Gravity", &(gravity[0]), 0.0f, 0.1f);
+		ImGui::SliderFloat3("Gravity", &(gravity[0]), -0.02f, 0.02f);
 		ImGui::SliderFloat("Resistance", &(resistance), 0.9f, 1.0f);
 		ImGui::SliderFloat("ballInitSpeed", &(ballInitSpeed), 0.0f, 1.0f);
 		ImGui::Checkbox("Random XZ", &randomXZ); ImGui::SameLine(150);
