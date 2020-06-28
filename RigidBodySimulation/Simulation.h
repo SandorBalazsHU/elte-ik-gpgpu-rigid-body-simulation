@@ -1,19 +1,17 @@
 #pragma once
 
-// C++ includes
 #include <memory>
 
-// GLEW
 #include <GL/glew.h>
 
-// SDL
 #include <SDL.h>
 #include <SDL_opengl.h>
 
-// GLM
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform2.hpp>
+
+#include "ObjParser_OGL3.h"
 
 #include "ProgramObject.h"
 #include "BufferObject.h"
@@ -21,17 +19,15 @@
 #include "TextureObject.h"
 
 #include "Mesh_OGL3.h"
-#include "gCamera.h"
+#include "Camera.h"
 
-class CMyApp
-{
+class Simulation {
 public:
-	CMyApp(void);
-	~CMyApp(void);
+	Simulation(void);
+	~Simulation(void);
 
 	bool Init();
 	void Clean();
-
 	void Update();
 	void Render();
 
@@ -42,20 +38,18 @@ public:
 	void MouseUp(SDL_MouseButtonEvent&);
 	void MouseWheel(SDL_MouseWheelEvent&);
 	void Resize(int, int);
+
 	float fps[100] = { 0.0f };
-protected:
-	int numberOfBalls = 40;
-	static const int numberOfBallsArray = 1500;
-	float boxSize;
+
+private:
 	float random(float lower, float upper);
 	void ballInit();
-	void WallBuild();
-	void wallCollision(glm::vec3& position, glm::vec3& velocity);
+	void wallBuilder();
+	void wallCollision(size_t i);
 	void ballCollision(size_t i);
-	glm::vec3 positions[numberOfBallsArray];
-	glm::vec3 velocities[numberOfBallsArray];
-	glm::vec4 colors[numberOfBallsArray];
-	bool collChech[numberOfBallsArray];
+
+	int numberOfBalls = 40;
+	float boxSize;
 	glm::vec3 gravity;
 	float resistance;
 	float ballInitSpeed;
@@ -63,22 +57,22 @@ protected:
 	bool ballCollisionRun = false;
 	bool randomXZ = false;
 	bool randomY = false;
-	
-	// shaderekhez szükséges változók
-	ProgramObject		m_program;		// shaderek programja
+	static const int numberOfBallsArray = 1500;
+	glm::vec3 positions[numberOfBallsArray];
+	glm::vec3 velocities[numberOfBallsArray];
+	glm::vec4 colors[numberOfBallsArray];
+	bool collisionCheck[numberOfBallsArray];
 
-	Texture2D			m_textureMetal;
-
-	VertexArrayObject	m_vao;			// VAO objektum
-	IndexBuffer			m_gpuBufferIndices;		// indexek
-	ArrayBuffer			m_gpuBufferPos;	// pozíciók tömbje
-	ArrayBuffer			m_gpuBufferNormal;	// normálisok tömbje
-	ArrayBuffer			m_gpuBufferTex;	// textúrakoordináták tömbje
-
-	std::unique_ptr<Mesh>	m_mesh;
-
-	gCamera				m_camera;
-
-	glm::vec4			m_wallColor = glm::vec4(1,1,1,0.2);
+	//Shader Variables
+	ProgramObject			shader;
+	Texture2D				texture;
+	VertexArrayObject		wall;
+	ArrayBuffer				wallCoordinates;
+	IndexBuffer				wallIndices;
+	ArrayBuffer				wallNormals;
+	ArrayBuffer				wallTextures;
+	std::unique_ptr<Mesh>	ball;
+	Camera					camera;
+	glm::vec4				wallColor = glm::vec4(1, 1, 1, 0.2);
 };
 

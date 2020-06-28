@@ -3,70 +3,48 @@
 #include <SDL.h>
 #include <glm/glm.hpp>
 
-class gCamera
+class Camera
 {
 public:
-	gCamera(void);
-	gCamera(glm::vec3 _eye, glm::vec3 _at, glm::vec3 _up);
-	~gCamera(void);
-
-	/// <summary>
-	/// Gets the view matrix.
-	/// </summary>
-	/// <returns>The 4x4 view matrix</returns>
-	glm::mat4 GetViewMatrix();
-
-	void Update(float _deltaTime);
-
+	Camera(void);
+	Camera(glm::vec3 _eye, glm::vec3 _at, glm::vec3 _up);
+	~Camera(void);
+	void Update();
 	void SetView(glm::vec3 _eye, glm::vec3 _at, glm::vec3 _up);
 	void SetProj(float _angle, float _aspect, float _zn, float _zf); 
 	void LookAt(glm::vec3 _at);
 
-	void SetSpeed(float _val);
-	glm::vec3 GetEye()
-	{
+	glm::vec3 GetEye() {
 		return m_eye;
 	}
 
-	glm::vec3 GetAt()
-	{
+	glm::vec3 GetAt() {
 		return m_at;
 	}
 
-	glm::vec3 GetUp()
-	{
+	glm::vec3 GetUp() {
 		return m_up;
 	}
 
-	glm::mat4 GetProj()
-	{
+	glm::mat4 GetProj() {
 		return m_matProj;
 	}
 
-	glm::mat4 GetViewProj()
-	{
+	glm::mat4 GetViewProj() {
 		return m_matViewProj;
 	}
 
 	void Resize(int _w, int _h);
-
 	void KeyboardDown(SDL_KeyboardEvent& key);
 	void KeyboardUp(SDL_KeyboardEvent& key);
 	void MouseMove(SDL_MouseMotionEvent& mouse);
 	void MouseWheel(SDL_MouseWheelEvent& wheel);
+	glm::mat4 GetViewMatrix();
 
 private:
-	/// <summary>
-	/// Updates the UV.
-	/// </summary>
-	/// <param name="du">The du, i.e. the change of spherical coordinate u.</param>
-	/// <param name="dv">The dv, i.e. the change of spherical coordinate v.</param>
+
 	void SphereUpdate(float r, float a, float b);
 
-	/// <summary>
-	///  The traversal speed of the camera
-	/// </summary>
-	float		m_speed;
 	/// <summary>
 	/// The view matrix of the camera
 	/// </summary>
