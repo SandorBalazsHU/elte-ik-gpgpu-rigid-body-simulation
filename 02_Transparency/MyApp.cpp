@@ -20,6 +20,7 @@ CMyApp::CMyApp(void)
 	gravity = glm::vec3(0.0f, 0.006f, 0.0f);
 	resistance = 0.996f;
 	ballInitSpeed = 0.2f;
+	boxSize = 20.0f;
 	ballInit();
 }
 
@@ -38,15 +39,28 @@ float CMyApp::random(float lower, float upper)
 }
 
 void CMyApp::ballInit() {
-	int r = 40;
+	float r = boxSize-2.0f;
+	float x = 0;
+	float y = boxSize - (boxSize / 4);
+	float z = 0;
 	for (size_t i = 0; i < numberOfBalls; i++)
 	{
-		//positions[i] = glm::vec3(random(-r,r), random(-r, r), random(-r, r));
-		positions[i] = glm::vec3(0, 2, 0);
+
+		if (randomXZ)
+		{
+			x = random(-r, r);
+			z = random(-r, r);
+		}
+		if (randomY) y = random(-r, r);
+		positions[i] = glm::vec3(x, y,z);
+		//positions[i] = glm::vec3(0, 2, 0);
 		velocities[i] = glm::vec3(random(-ballInitSpeed, ballInitSpeed),
 								  random(-ballInitSpeed, ballInitSpeed),
 								  random(-ballInitSpeed, ballInitSpeed));
 		veight[i] = 1.0f;
+		colors[i] = glm::vec4(random(0.0f, 1.0f),
+							  random(0.0f, 1.0f),
+							  random(0.0f, 1.0f), 1);
 		//velocities[i] = glm::vec3(random(-0.1, 0.1), random(-0.1, 0.1), random(-0.1, 0.1));
 	}
 }
@@ -193,16 +207,17 @@ void CMyApp::wallCollision(glm::vec3& position, glm::vec3& velocity)
 {
 	glm::vec3 normal = glm::vec3(0.0f, 0.0f, 0.0f);
 
-	if (position.y <= -boxSize + 1.1f) normal = glm::vec3(0.0f,  1.0f, 0.0f);
-	if (position.y >= boxSize - 1.1f)  normal = glm::vec3(0.0f, -1.0f, 0.0f);
-	if (position.x <= -boxSize + 1.1f) normal = glm::vec3(1.0f,  0.0f, 0.0f);
-	if (position.x >= boxSize - 1.1f)  normal = glm::vec3(-1.0f, 0.0f, 0.0f);
-	if (position.z <= -boxSize + 1.1f) normal = glm::vec3(0.0f,  0.0f, 1.0f);
-	if (position.z >= boxSize - 1.1f)  normal = glm::vec3(0.0f,  0.0f, -1.0f);
+	if (position.y <= -boxSize + 1.0f) normal = glm::vec3(0.0f,  1.0f, 0.0f);
+	if (position.y >= boxSize - 1.0f)  normal = glm::vec3(0.0f, -1.0f, 0.0f);
+	if (position.x <= -boxSize + 1.0f) normal = glm::vec3(1.0f,  0.0f, 0.0f);
+	if (position.x >= boxSize - 1.0f)  normal = glm::vec3(-1.0f, 0.0f, 0.0f);
+	if (position.z <= -boxSize + 1.0f) normal = glm::vec3(0.0f,  0.0f, 1.0f);
+	if (position.z >= boxSize - 1.0f)  normal = glm::vec3(0.0f,  0.0f, -1.0f);
 		
 	if (normal != glm::vec3(0.0f, 0.0f, 0.0f))
 	{
 		velocity = glm::reflect(velocity, normal);
+		//velocity = velocity - 0.005f;
 		//if (glm::length(velocity) > 0.01f) velocity = newVelocity;
 	}
 }
@@ -218,8 +233,8 @@ void CMyApp::ballCollision(size_t i)
 			//std::cout << "COLLISION " << i << "," << j << std::endl;
 			glm::vec3 n = (positions[i] - positions[j]) / abs(positions[i] - positions[j]);
 			glm::vec3 normal = ((velocities[i] - velocities[j]) * n) * n;
-			velocities[i] = velocities[i] - normal;
-			velocities[j] = velocities[j] + normal;
+			velocities[i] = velocities[i] - normal - 0.005f;
+			velocities[j] = velocities[j] + normal + 0.005f;
 		}
 	}
 }
@@ -241,7 +256,7 @@ void CMyApp::Render()
 		//if (glm::length(velocities[i]) >= 0.02f && run)
 		if (run)
 		{
-				velocities[i] = velocities[i] * resistance - gravity;
+				velocities[i] = (velocities[i] - gravity) * resistance;
 				wallCollision(positions[i], velocities[i]);
 				if (ballCollisionRun) ballCollision(i);
 				positions[i] = positions[i] + velocities[i];
@@ -250,7 +265,7 @@ void CMyApp::Render()
 		m_program.SetUniform("world", suzanne1World);
 		m_program.SetUniform("worldIT", glm::transpose(glm::inverse(suzanne1World)));
 		m_program.SetUniform("MVP", m_camera.GetViewProj() * suzanne1World);
-		m_program.SetUniform("Kd", glm::vec4(0.8, 0.8, 0, 1));
+		m_program.SetUniform("Kd", colors[i]);
 		m_mesh->draw();
 	}
 
@@ -296,7 +311,9 @@ void CMyApp::Render()
 		ImGui::SliderFloat3("Gravity", &(gravity[0]), 0.0f, 0.1f);
 		ImGui::SliderFloat("Resistance", &(resistance), 0.9f, 1.0f);
 		ImGui::SliderFloat("ballInitSpeed", &(ballInitSpeed), 0.0f, 1.0f);
-		ImGui::Checkbox("RUN", &run);
+		ImGui::Checkbox("Random XZ", &randomXZ); ImGui::SameLine(150);
+		ImGui::Checkbox("Random Y", &randomY);
+		ImGui::Checkbox("RUN", &run); ImGui::SameLine(150);
 		ImGui::Checkbox("Collision", &ballCollisionRun);
 		static int clicked = 0;
 		if (ImGui::Button("START")) ballInit();
