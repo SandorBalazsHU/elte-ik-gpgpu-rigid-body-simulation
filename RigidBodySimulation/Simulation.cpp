@@ -18,31 +18,10 @@ Simulation::Simulation(void) {
 	resistance = 0.996f;
 	ballInitSpeed = 0.2f;
 	boxSize = 15.0f;
-
-	//Balls start initialisation
-	ballInit();
 }
 
 //Destructor
 Simulation::~Simulation(void){}
-
-//Balls start initialisation
-void Simulation::ballInit() {
-	float r = boxSize - 2.0f;
-	float x = 0;
-	float y = boxSize - (boxSize / 4);
-	float z = 0;
-	for (size_t i = 0; i < numberOfBallsArray; i++) {
-		if (randomXZ) {	
-						x	= random(-r, r);	
-						z	= random(-r, r); }
-		if (randomY)    y	= random(-r, r);
-		positions[i]		= glm::vec3(x, y, z);
-		velocities[i]		= glm::vec3(random(-ballInitSpeed, ballInitSpeed), random(-ballInitSpeed, ballInitSpeed), random(-ballInitSpeed, ballInitSpeed));
-		colors[i]			= glm::vec4(random(0.0f, 1.0f), random(0.0f, 1.0f), random(0.0f, 1.0f), 1);
-		collisionCheck[i]	= true;
-	}
-}
 
 //Simulation rendering intitialisation
 bool Simulation::Init() {
@@ -75,7 +54,31 @@ bool Simulation::Init() {
 	//Set Camera
 	camera.SetProj(45.0f, 640.0f / 480.0f, 0.01f, 1000.0f);
 
+	//Balls start initialisation
+	ballInit();
+
 	return true;
+}
+
+//Balls start initialisation
+void Simulation::ballInit() {
+	float r = boxSize - 2.0f;
+	float x = 0;
+	float y = boxSize - (boxSize / 4);
+	float z = 0;
+	for (size_t i = 0; i < numberOfBallsArray; i++) {
+		if (randomXZ) {
+			x = random(-r, r);
+			z = random(-r, r);
+		}
+		if (randomY)    y = random(-r, r);
+		positions[i] = glm::vec3(x, y, z);
+		velocities[i] = glm::vec3(random(-ballInitSpeed, ballInitSpeed), random(-ballInitSpeed, ballInitSpeed), random(-ballInitSpeed, ballInitSpeed));
+		colors[i] = glm::vec4(random(0.0f, 1.0f), random(0.0f, 1.0f), random(0.0f, 1.0f), 1);
+		collisionCheck[i] = true;
+	}
+	//Copy datas to GPU
+	if (CLisActive) UpdateCL();
 }
 
 void Simulation::Clean() {

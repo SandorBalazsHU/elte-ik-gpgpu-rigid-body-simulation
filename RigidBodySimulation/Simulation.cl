@@ -3,43 +3,75 @@ __kernel void update(
 	__global float3* velocities,
 	__global bool* collisionCheck,
 	int numberOfBalls,
-	float boxSize)
+	float boxSize,
+	float resistance,
+	float3 gravity)
 {
-	/*// Numerical integration for speed and distance
-	//   v = a * t
-	//   s = v * t
+	int i = get_global_id(0);
 
-	// Relate force, mass and acceleration
-	//   F = m*a
+	velocities[i] = velocities[i] - gravity;
+	velocities[i] = velocities[i] * resistance;
+	positions[i] = positions[i] + velocities[i];
 
-	// Newton: Law of universal gravitation
-	//   Givew two object with mass m_1, m_2 and distance d
-	//   F_grav = (G * m_1 * m_2) / d^2
-	//
-	// (Tip: add a small constant to divisor to avoid numerical errors!)
+	float3 normal = (float3)(0.0f, 0.0f, 0.0f);
 
-	const float G = 0.0001; // gravitational constant
-
-	int gid = get_global_id(0);
-	float2 p_gid = p[gid];
-	float m_gid = m[gid];
-
-	// Aggregate acceleration for each object
-	float2 a_gid = { 0.0f, 0.0f };
-	for (int i = 0; i < get_global_size(0); ++i)
-	{
-		if (i == gid) continue;
-		float2 p_other = p[i];
-		float m_other = m[i];
-
-		// 1. compute force and distance
-		// 2. compute acceleration
-		// 3. aggregate acceleration
+	if (positions[i].y <= -boxSize + 1.0f) {
+		normal = (float3)(0.0f, 1.0f, 0.0f);
+		positions[i].y = -boxSize + 1.1f;
+	}
+	if (positions[i].y >= boxSize - 1.0f) {
+		normal = (float3)(0.0f, -1.0f, 0.0f);
+		positions[i].y = boxSize - 1.1f;
+	}
+	if (positions[i].x <= -boxSize + 1.0f) {
+		normal = (float3)(1.0f, 0.0f, 0.0f);
+		positions[i].x = -boxSize + 1.1f;
+	}
+	if (positions[i].x >= boxSize - 1.0f) {
+		normal = (float3)(-1.0f, 0.0f, 0.0f);
+		positions[i].x = boxSize - 1.1f;
+	}
+	if (positions[i].z <= -boxSize + 1.0f) {
+		normal = (float3)(0.0f, 0.0f, 1.0f);
+		positions[i].z = -boxSize + 1.1f;
+	}
+	if (positions[i].z >= boxSize - 1.0f) {
+		normal = (float3)(0.0f, 0.0f, -1.0f);
+		positions[i].z = boxSize - 1.1f;
 	}
 
-	// 4. integrate speed (using dt and a_gid)
-	//v[gid] = 
+	if (normal.x != 0.0f || normal.y != 0.0f || normal.z != 0.0f) {
+		float3 dot = (float3)(normal.x * velocities[i].x, normal.y * velocities[i].y, normal.z * velocities[i].z);
+		velocities[i] = velocities[i] - 2.0f * dot * normal;
+		velocities[i] = velocities[i] * resistance; //Plus resistance
+	}
 
-	// 5. integrate position
-	//p[gid] = */
+	/*//Handle the ball to ball collision and reflection
+	void Simulation::ballCollision(size_t i) {
+		for (size_t j = 0; j < numberOfBalls; j++) {
+			if (i != j && collisionCheck[j]) {
+				float distance = glm::distance(positions[i], positions[j]);
+				if (distance < 2.0f)
+				{
+					//Bcouse zero division.
+					if (distance <= 0.1f) {
+						positions[i] = positions[i] + velocities[i];
+						positions[j] = positions[j] + velocities[j];
+					}
+					//std::cout << "COLLISION " << i << "," << j << std::endl;
+					glm::vec3 n = (positions[i] - positions[j]) / abs(positions[i] - positions[j]);
+					glm::vec3 normal = ((velocities[i] - velocities[j]) * n) * n;
+					velocities[i] = velocities[i] - normal;
+					velocities[j] = velocities[j] + normal;
+					velocities[i] = velocities[i] * (resistance * resistance); //Plus resistance
+					velocities[j] = velocities[j] * (resistance * resistance); //Plus resistance
+					positions[i] = positions[i] + (((2.0f - distance) / glm::length(velocities[i])) * velocities[i]);
+					positions[j] = positions[j] + (((2.0f - distance) / glm::length(velocities[j])) * velocities[j]);
+					//if (glm::length(velocities[i]) <= 0.1f) velocities[i] = glm::vec3(0);
+					//if (glm::length(velocities[j]) <= 0.1f) velocities[j] = glm::vec3(0);
+				}
+			}
+		}
+		collisionCheck[i] = false;
+	}*/
 }

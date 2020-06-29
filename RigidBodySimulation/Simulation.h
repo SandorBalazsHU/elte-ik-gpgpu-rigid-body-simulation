@@ -30,7 +30,6 @@ public:
 	void Clean();
 	void Update();
 	void Render();
-	void CalculateCL();
 
 	void KeyboardDown(SDL_KeyboardEvent&);
 	void KeyboardUp(SDL_KeyboardEvent&);
@@ -49,6 +48,10 @@ private:
 	void wallBuilder();
 	void wallCollision(size_t i);
 	void ballCollision(size_t i);
+	void Collision_CPU(size_t i);
+	void Collision_GPU();
+	void UpdateCL();
+	bool CLisActive = true;
 
 	//Simulation variables
 	int numberOfBalls = 40;

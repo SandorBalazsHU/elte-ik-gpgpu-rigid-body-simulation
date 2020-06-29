@@ -15,14 +15,14 @@
 #include "simulation.h"
 
 char* currentDateTime() {
-	//time_t rawtime;
-	//struct tm* timeinfo;
+	time_t rawtime;
+	struct tm* timeinfo;
 	char buffer[80];
 
-	//time(&rawtime);
-	//timeinfo = localtime(&rawtime);
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
 
-	//strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", timeinfo);
+	strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", timeinfo);
 	return buffer;
 }
 
@@ -104,20 +104,21 @@ int main(int argc, char* args[])
 	SDL_Event event;
 	int fpsPlotCounter = 0;
 
-	//Simulation Initialisation
 	Simulation simulation;
-	if (!simulation.Init()) {
-		SDL_GL_DeleteContext(context);
-		SDL_DestroyWindow(window);
-		std::cerr << currentDateTime() << "[Simulation ERROR]" << std::endl;
-		return 1;
-	}
 
 	//OpenCL Initialisation
 	if (!simulation.InitCL()) {
 		SDL_GL_DeleteContext(context);
 		SDL_DestroyWindow(window);
 		std::cerr << currentDateTime() << "[OpenCL INIT ERROR]" << std::endl;
+		return 1;
+	}
+
+	//Simulation Initialisation
+	if (!simulation.Init()) {
+		SDL_GL_DeleteContext(context);
+		SDL_DestroyWindow(window);
+		std::cerr << currentDateTime() << "[Simulation ERROR]" << std::endl;
 		return 1;
 	}
 

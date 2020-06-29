@@ -1,5 +1,13 @@
 #include "Simulation.h"
 
+void Simulation::Collision_CPU(size_t i) {
+	velocities[i] = velocities[i] - gravity;
+	velocities[i] = velocities[i] * resistance;
+	positions[i] = positions[i] + velocities[i];
+	if (ballCollisionRun)	ballCollision(i);
+	wallCollision(i);
+}
+
 //Handle the ball to wall collision and refraction
 void Simulation::wallCollision(size_t i) {
 	glm::vec3 normal = glm::vec3(0.0f, 0.0f, 0.0f);

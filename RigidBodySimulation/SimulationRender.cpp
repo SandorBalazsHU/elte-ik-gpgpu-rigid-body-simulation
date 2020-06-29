@@ -3,24 +3,18 @@
 
 //The render loop
 void Simulation::Render() {
-	//Clear buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	shader.Use();
 	shader.SetTexture("texImage", 0, texture);
 
-	//Run OpenCL GPU Collision Detector
-	CalculateCL();
+	//GPU Collision handler
+	if (run && CLisActive) Collision_GPU();
 
 	//The ball handler loop
 	for (size_t i = 0; i < numberOfBalls; i++) {
-		if (run) {
-			velocities[i] = velocities[i] - gravity;
-			velocities[i] = velocities[i] * resistance;
-			positions[i] = positions[i] + velocities[i];
-			if (ballCollisionRun)	ballCollision(i);
-			wallCollision(i);
-		}
+		//CPU Collision handler
+		if (run && !CLisActive) Collision_CPU(i);
+		//Ball Drawer
 		glm::mat4 suzanne1World = glm::translate(positions[i]);
 		shader.SetUniform("world", suzanne1World);
 		shader.SetUniform("worldIT", glm::transpose(glm::inverse(suzanne1World)));
@@ -28,6 +22,7 @@ void Simulation::Render() {
 		shader.SetUniform("Kd", colors[i]);
 		ball->draw();
 	}
+
 	//Clear the ball collision update checker
 	for (size_t i = 0; i < numberOfBalls; i++) collisionCheck[i] = true;
 
@@ -62,6 +57,7 @@ void Simulation::Render() {
 		ImGui::Checkbox("Random Y", &randomY);
 		ImGui::Checkbox("RUN", &run); ImGui::SameLine(150);
 		ImGui::Checkbox("Collision", &ballCollisionRun);
+		ImGui::Checkbox("GPU Computing", &CLisActive);
 		static int clicked = 0;
 		if (ImGui::Button("START")) {
 			wallBuilder();

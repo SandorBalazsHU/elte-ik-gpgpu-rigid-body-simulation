@@ -72,21 +72,24 @@ bool Simulation::InitCL() {
 	return true;
 }
 
-void Simulation::CalculateCL() {
+void Simulation::UpdateCL() {
+	//Write the current vectors to GPU
+	commandQueue.enqueueWriteBuffer(CLpositions, CL_TRUE, 0, numberOfBalls * sizeof(glm::vec3), positions);
+	commandQueue.enqueueWriteBuffer(CLvelocities, CL_TRUE, 0, numberOfBalls * sizeof(glm::vec3), velocities);
+	commandQueue.enqueueWriteBuffer(CLcollisionCheck, CL_TRUE, 0, numberOfBalls * sizeof(bool), collisionCheck);
+	kernel.setArg(0, CLpositions);
+	kernel.setArg(1, CLvelocities);
+	kernel.setArg(2, CLcollisionCheck);
+	//Set the current variables
+	kernel.setArg(3, numberOfBalls);
+	kernel.setArg(4, boxSize);
+	kernel.setArg(5, resistance);
+	kernel.setArg(6, gravity);
+}
+
+void Simulation::Collision_GPU() {
 	// Run Kernel
 	try {
-		//Write the current vectors to GPU
-		commandQueue.enqueueWriteBuffer(CLpositions, CL_TRUE, 0, numberOfBalls * sizeof(glm::vec3), positions);
-		commandQueue.enqueueWriteBuffer(CLvelocities, CL_TRUE, 0, numberOfBalls * sizeof(glm::vec3), velocities);
-		commandQueue.enqueueWriteBuffer(CLcollisionCheck, CL_TRUE, 0, numberOfBalls * sizeof(bool), collisionCheck);
-
-		kernel.setArg(0, CLpositions);
-		kernel.setArg(1, CLvelocities);
-		kernel.setArg(2, CLcollisionCheck);
-		//Set the current variables
-		kernel.setArg(3, numberOfBalls);
-		kernel.setArg(4, boxSize);
-
 		//RUN THE KERNEL
 		cl::NDRange global(numberOfBalls);
 
@@ -95,6 +98,9 @@ void Simulation::CalculateCL() {
 
 		// Wait for all computations to finish
 		commandQueue.finish();
+
+		//Copy the resoults
+		commandQueue.enqueueReadBuffer(CLpositions, CL_TRUE, 0, numberOfBalls * sizeof(glm::vec3), positions);
 	}
 	catch (cl::Error error) {
 		std::cerr << error.what() << std::endl;
