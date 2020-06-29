@@ -68,10 +68,10 @@ void Camera::MouseMove(SDL_MouseMotionEvent& mouse) {
 
 void Camera::MouseWheel(SDL_MouseWheelEvent& wheel) {
 	if (wheel.y > 0) {		// scroll up
-		SphereUpdate(wheel.y, 0, 0);
+		SphereUpdate(wheel.y*2, 0, 0);
 	}
 	else if (wheel.y < 0) {	// scroll down
-		SphereUpdate(wheel.y, 0, 0);
+		SphereUpdate(wheel.y*2, 0, 0);
 	}
 }
 

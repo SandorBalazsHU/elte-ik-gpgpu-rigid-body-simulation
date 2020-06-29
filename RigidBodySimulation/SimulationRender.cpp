@@ -9,6 +9,9 @@ void Simulation::Render() {
 	shader.Use();
 	shader.SetTexture("texImage", 0, texture);
 
+	//Run OpenCL GPU Collision Detector
+	CalculateCL();
+
 	//The ball handler loop
 	for (size_t i = 0; i < numberOfBalls; i++) {
 		if (run) {
@@ -54,7 +57,7 @@ void Simulation::Render() {
 		ImGui::SliderFloat("Resistance", &(resistance), 0.9f, 1.0f);
 		ImGui::SliderFloat("ballInitSpeed", &(ballInitSpeed), 0.0f, 1.0f);
 		if (ImGui::SliderFloat("boxSize", &(boxSize), 5.0f, 100.0f)) wallBuilder();
-		ImGui::SliderInt("numberOfBalls", &(numberOfBalls), 1, 1499);
+		ImGui::SliderInt("numberOfBalls", &(numberOfBalls), 1, numberOfBallsArray-1);
 		ImGui::Checkbox("Random XZ", &randomXZ); ImGui::SameLine(150);
 		ImGui::Checkbox("Random Y", &randomY);
 		ImGui::Checkbox("RUN", &run); ImGui::SameLine(150);

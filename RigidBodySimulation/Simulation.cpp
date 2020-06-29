@@ -78,7 +78,9 @@ bool Simulation::Init() {
 	return true;
 }
 
-void Simulation::Clean(){}
+void Simulation::Clean() {
+	shader.Clean();
+}
 
 //Update the Camera
 void Simulation::Update() {

@@ -11,8 +11,11 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{01bc2f93-9061-40f8-a118-1a1a1296c483}</UniqueIdentifier>
     </Filter>
-    <Filter Include="imgui">
+    <Filter Include="Imgui">
       <UniqueIdentifier>{7f927b79-9001-4a4e-a946-477c3bb2adac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Kernel">
+      <UniqueIdentifier>{f897a8e5-9623-4010-ba20-1e4866d17412}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -53,16 +56,28 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="T:\OGLPack\include\imgui\imgui_draw.cpp">
-      <Filter>imgui</Filter>
+      <Filter>Imgui</Filter>
     </ClCompile>
     <ClCompile Include="T:\OGLPack\include\imgui\imgui_impl_sdl_gl3.cpp">
-      <Filter>imgui</Filter>
+      <Filter>Imgui</Filter>
     </ClCompile>
     <ClCompile Include="T:\OGLPack\include\imgui\imgui.cpp">
-      <Filter>imgui</Filter>
+      <Filter>Imgui</Filter>
     </ClCompile>
     <ClCompile Include="T:\OGLPack\include\imgui\imgui_demo.cpp">
-      <Filter>imgui</Filter>
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="GPU.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gTimer.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="gVertexBuffer.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="gShaderProgram.cpp">
+      <Filter>Utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -97,25 +112,37 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="T:\OGLPack\include\imgui\stb_rect_pack.h">
-      <Filter>imgui</Filter>
+      <Filter>Imgui</Filter>
     </ClInclude>
     <ClInclude Include="T:\OGLPack\include\imgui\stb_textedit.h">
-      <Filter>imgui</Filter>
+      <Filter>Imgui</Filter>
     </ClInclude>
     <ClInclude Include="T:\OGLPack\include\imgui\stb_truetype.h">
-      <Filter>imgui</Filter>
+      <Filter>Imgui</Filter>
     </ClInclude>
     <ClInclude Include="T:\OGLPack\include\imgui\imconfig.h">
-      <Filter>imgui</Filter>
+      <Filter>Imgui</Filter>
     </ClInclude>
     <ClInclude Include="T:\OGLPack\include\imgui\imgui.h">
-      <Filter>imgui</Filter>
+      <Filter>Imgui</Filter>
     </ClInclude>
     <ClInclude Include="T:\OGLPack\include\imgui\imgui_impl_sdl_gl3.h">
-      <Filter>imgui</Filter>
+      <Filter>Imgui</Filter>
     </ClInclude>
     <ClInclude Include="T:\OGLPack\include\imgui\imgui_internal.h">
-      <Filter>imgui</Filter>
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="gTimer.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="gVertexBuffer.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="GLUtils.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="gShaderProgram.h">
+      <Filter>Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +163,9 @@
     </None>
     <None Include="fragmentShader.frag">
       <Filter>Shaders</Filter>
+    </None>
+    <None Include="Simulation.cl">
+      <Filter>Kernel</Filter>
     </None>
   </ItemGroup>
 </Project>

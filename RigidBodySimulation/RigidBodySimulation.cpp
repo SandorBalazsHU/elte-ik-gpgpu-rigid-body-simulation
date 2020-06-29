@@ -34,8 +34,8 @@ void exitProgram() {
 int main(int argc, char* args[])
 {
 	//Logging to files.
-	//freopen("simulation.log", "w", stdout);
-	//freopen("error.log", "w", stderr);
+	freopen("simulation.log", "w", stdout);
+	freopen("error.log", "w", stderr);
 
 	//Exit Callback
 	atexit(exitProgram);
@@ -110,6 +110,14 @@ int main(int argc, char* args[])
 		SDL_GL_DeleteContext(context);
 		SDL_DestroyWindow(window);
 		std::cerr << currentDateTime() << "[Simulation ERROR]" << std::endl;
+		return 1;
+	}
+
+	//OpenCL Initialisation
+	if (!simulation.InitCL()) {
+		SDL_GL_DeleteContext(context);
+		SDL_DestroyWindow(window);
+		std::cerr << currentDateTime() << "[OpenCL INIT ERROR]" << std::endl;
 		return 1;
 	}
 

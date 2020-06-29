@@ -1,8 +1,7 @@
 #pragma once
+#include <GL/glew.h>
 
 #include <memory>
-
-#include <GL/glew.h>
 
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -11,13 +10,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform2.hpp>
 
-#include "ObjParser_OGL3.h"
+#include <CL/cl.hpp>
 
+#include "ObjParser_OGL3.h"
 #include "ProgramObject.h"
 #include "BufferObject.h"
 #include "VertexArrayObject.h"
 #include "TextureObject.h"
-
 #include "Mesh_OGL3.h"
 #include "Camera.h"
 
@@ -27,9 +26,11 @@ public:
 	~Simulation(void);
 
 	bool Init();
+	bool InitCL();
 	void Clean();
 	void Update();
 	void Render();
+	void CalculateCL();
 
 	void KeyboardDown(SDL_KeyboardEvent&);
 	void KeyboardUp(SDL_KeyboardEvent&);
@@ -42,12 +43,14 @@ public:
 	float fps[100] = { 0.0f };
 
 private:
+	//Private helper methods
 	float random(float lower, float upper);
 	void ballInit();
 	void wallBuilder();
 	void wallCollision(size_t i);
 	void ballCollision(size_t i);
 
+	//Simulation variables
 	int numberOfBalls = 40;
 	float boxSize;
 	glm::vec3 gravity;
@@ -73,6 +76,13 @@ private:
 	ArrayBuffer				wallTextures;
 	std::unique_ptr<Mesh>	ball;
 	Camera					camera;
-	glm::vec4				wallColor = glm::vec4(1, 1, 1, 0.2);
+	glm::vec4				wallColor = glm::vec4(1, 1, 1, 0.1);
+
+	//OpenCL variables
+	cl::Context context;
+	cl::CommandQueue commandQueue;
+	cl::Program program;
+	cl::Kernel kernel;
+	cl::Buffer CLvelocities, CLpositions, CLcollisionCheck;
 };
 
