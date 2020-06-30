@@ -63,7 +63,7 @@ bool Simulation::InitCL() {
 
 		CLvelocities = cl::Buffer(context, CL_MEM_READ_WRITE, numberOfBallsArray * sizeof(glm::vec3));
 		CLpositions = cl::Buffer(context, CL_MEM_READ_WRITE, numberOfBallsArray * sizeof(glm::vec3));
-		CLcollisionCheck = cl::Buffer(context, CL_MEM_READ_WRITE, numberOfBallsArray * sizeof(bool));
+		//CLcollisionCheck = cl::Buffer(context, CL_MEM_READ_WRITE, numberOfBallsArray * sizeof(bool));
 	}
 	catch (cl::Error error)	{
 		std::cerr << error.what() << std::endl;
@@ -76,15 +76,18 @@ void Simulation::UpdateCL() {
 	//Write the current vectors to GPU
 	commandQueue.enqueueWriteBuffer(CLpositions, CL_TRUE, 0, numberOfBalls * sizeof(glm::vec3), positions);
 	commandQueue.enqueueWriteBuffer(CLvelocities, CL_TRUE, 0, numberOfBalls * sizeof(glm::vec3), velocities);
-	commandQueue.enqueueWriteBuffer(CLcollisionCheck, CL_TRUE, 0, numberOfBalls * sizeof(bool), collisionCheck);
+	//commandQueue.enqueueWriteBuffer(CLcollisionCheck, CL_TRUE, 0, numberOfBalls * sizeof(bool), collisionCheck);
 	kernel.setArg(0, CLpositions);
 	kernel.setArg(1, CLvelocities);
-	kernel.setArg(2, CLcollisionCheck);
+	//kernel.setArg(2, CLcollisionCheck);
 	//Set the current variables
-	kernel.setArg(3, numberOfBalls);
-	kernel.setArg(4, boxSize);
-	kernel.setArg(5, resistance);
-	kernel.setArg(6, gravity);
+	kernel.setArg(2, numberOfBalls);
+	kernel.setArg(3, boxSize);
+	kernel.setArg(4, resistance);
+	kernel.setArg(5, gravity);
+	int ballCollisionRunGPU = 0;
+	if (ballCollisionRun) ballCollisionRunGPU = 1;
+	kernel.setArg(6, ballCollisionRunGPU);
 }
 
 void Simulation::Collision_GPU() {

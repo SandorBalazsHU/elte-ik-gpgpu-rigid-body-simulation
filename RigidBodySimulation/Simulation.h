@@ -54,7 +54,7 @@ private:
 	bool CLisActive = true;
 
 	//Simulation variables
-	int numberOfBalls = 40;
+	int numberOfBalls = 8;
 	float boxSize;
 	glm::vec3 gravity;
 	float resistance;

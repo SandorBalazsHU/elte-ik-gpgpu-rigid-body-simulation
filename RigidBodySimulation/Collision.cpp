@@ -56,7 +56,6 @@ void Simulation::ballCollision(size_t i) {
 					positions[i] = positions[i] + velocities[i];
 					positions[j] = positions[j] + velocities[j];
 				}
-				//std::cout << "COLLISION " << i << "," << j << std::endl;
 				glm::vec3 n = (positions[i] - positions[j]) / abs(positions[i] - positions[j]);
 				glm::vec3 normal = ((velocities[i] - velocities[j]) * n) * n;
 				velocities[i] = velocities[i] - normal;
