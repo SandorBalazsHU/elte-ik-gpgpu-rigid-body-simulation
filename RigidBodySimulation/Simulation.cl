@@ -28,8 +28,8 @@ __kernel void update(
 				if (dist < 2.0f) {
 					//Becouse zero division.
 					if (dist <= 0.1f) {
-						iPosition = iPosition + iVelocity;
-						jPosition = jPosition + jVelocity;
+						iPosition = iPosition + iVelocity*2.0f;
+						jPosition = jPosition + jVelocity*2.0f;
 					}
 					float iLength = fast_length(iVelocity);
 					float3 p = iPosition - jPosition;
@@ -42,8 +42,8 @@ __kernel void update(
 
 					iVelocity = iVelocity * (resistance * resistance); //Plus resistance
 					jVelocity = jVelocity * (resistance * resistance); //Plus resistance
-					iPosition = iPosition + (((2.2f - dist) / length(iVelocity)) * iVelocity);
-					jPosition = jPosition - (((2.2f - dist) / length(jVelocity)) * jVelocity);
+					iPosition = iPosition + (((2.2f - dist) / fast_length(iVelocity)) * iVelocity);
+					jPosition = jPosition - (((2.2f - dist) / fast_length(jVelocity)) * jVelocity);
 				
 					vstore3(jVelocity, j, velocities);
 					vstore3(jPosition, j, positions);
