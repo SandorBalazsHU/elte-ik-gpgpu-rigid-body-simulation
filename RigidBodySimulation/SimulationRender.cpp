@@ -7,7 +7,8 @@ void Simulation::Render() {
 	shader.Use();
 	shader.SetTexture("texImage", 0, texture);
 
-
+	//GPU Collision handler
+	if (run && CLisActive) Collision_GPU();
 
 	//The ball handler loop
 	for (size_t i = 0; i < numberOfBalls; i++) {
@@ -20,12 +21,7 @@ void Simulation::Render() {
 		shader.SetUniform("MVP", camera.GetViewProj() * suzanne1World);
 		shader.SetUniform("Kd", colors[i]);
 		ball->draw();
-		std::cout << positions[i].x << ", " << positions[i].y << ", " << positions[i].z << std::endl;
 	}
-	std::cout << "----------FUCK--------" << std::endl;
-
-	//GPU Collision handler
-	if (run && CLisActive) Collision_GPU();
 
 	//Clear the ball collision update checker
 	for (size_t i = 0; i < numberOfBalls; i++) collisionCheck[i] = true;
