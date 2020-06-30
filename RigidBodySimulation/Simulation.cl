@@ -38,12 +38,12 @@ __kernel void update(
 					float jLength = fast_length(jVelocity);
 					p = jPosition - iPosition;
 					v = jVelocity - iVelocity;
-					jVelocity = normalize(jVelocity - (dot(v, p)) / (sqrt(v.x * v.x + v.y * v.y + v.z * v.z)) * p) * jLength;
+					jVelocity = normalize(jVelocity - (dot(v, p)) / (sqrt(v.x * v.x + v.y * v.y + v.z * v.z)) * p) * (jLength / 2.0f);
 
 					iVelocity = iVelocity * (resistance * resistance); //Plus resistance
 					jVelocity = jVelocity * (resistance * resistance); //Plus resistance
-					iPosition = iPosition + (((2.1f - dist) / length(iVelocity)) * iVelocity);
-					jPosition = jPosition + (((2.0f - dist) / length(jVelocity)) * jVelocity);
+					iPosition = iPosition + (((2.2f - dist) / length(iVelocity)) * iVelocity);
+					jPosition = jPosition - (((2.2f - dist) / length(jVelocity)) * jVelocity);
 				
 					vstore3(jVelocity, j, velocities);
 					vstore3(jPosition, j, positions);
