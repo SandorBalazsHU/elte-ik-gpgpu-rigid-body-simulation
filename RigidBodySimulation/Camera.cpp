@@ -61,7 +61,7 @@ void Camera::KeyboardDown(SDL_KeyboardEvent& key){}
 void Camera::KeyboardUp(SDL_KeyboardEvent& key){}
 
 void Camera::MouseMove(SDL_MouseMotionEvent& mouse) {
-	if ( mouse.state & SDL_BUTTON_LMASK ) {
+	if ( mouse.state & SDL_BUTTON_RMASK ) {
 		SphereUpdate(0, mouse.xrel/100.0f, mouse.yrel/100.0f);
 	}
 }
