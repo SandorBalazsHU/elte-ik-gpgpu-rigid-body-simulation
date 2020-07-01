@@ -79,6 +79,9 @@
     <ClCompile Include="gShaderProgram.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="Barrier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProgramObject.h">

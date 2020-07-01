@@ -4,7 +4,8 @@ void Simulation::Collision_CPU(size_t i) {
 	velocities[i] = velocities[i] - gravity;
 	velocities[i] = velocities[i] * resistance;
 	positions[i] = positions[i] + velocities[i];
-	if (ballCollisionRun)	ballCollision(i);
+	if (ballCollisionRun) ballCollision(i);
+	if(barrierIsOn) barrierCollision(i);
 	wallCollision(i);
 }
 
@@ -35,6 +36,50 @@ void Simulation::wallCollision(size_t i) {
 	if (positions[i].z >= boxSize - 1.0f) {
 		normal = glm::vec3(0.0f, 0.0f, -1.0f);
 		positions[i].z = boxSize - 1.01f;
+	}
+
+	if (normal != glm::vec3(0.0f, 0.0f, 0.0f)) {
+		velocities[i] = glm::reflect(velocities[i], normal);
+		velocities[i] = ((velocities[i] * resistance) * resistance) * resistance;	//Plus resistance
+	}
+}
+
+//Handle the ball to marrier collision and refraction
+void Simulation::barrierCollision(size_t i) {
+	glm::vec3 normal = glm::vec3(0.0f, 0.0f, 0.0f);
+
+	barrierSize = boxSize / 6;
+
+	if (positions[i].y <= (-boxSize + barrierSize*2.0f) + 1.0f &&
+	   (positions[i].x >= -barrierSize + barrierShift.x) && (positions[i].x <= barrierSize + barrierShift.x) &&
+	   (positions[i].z >= -barrierSize + barrierShift.z) && (positions[i].z <= barrierSize + +barrierShift.z)) {
+		normal = glm::vec3(0.0f, 1.0f, 0.0f); 
+		positions[i].y = (-boxSize + barrierSize*2.0f) + 1.01f;
+	}
+	if (positions[i].y < (-boxSize + barrierSize * 2.0f) &&
+	   (positions[i].x > -barrierSize + barrierShift.x - 1.0f) && (positions[i].x < -barrierSize + barrierShift.x) &&
+	   (positions[i].z > -barrierSize + barrierShift.z) && (positions[i].z < barrierSize + +barrierShift.z)) {
+		normal = glm::vec3(1.0f, 0.0f, 0.0f);
+		positions[i].x = -barrierSize + barrierShift.x - 1.01f;
+	}
+	if (positions[i].y < (-boxSize + barrierSize * 2.0f) &&
+		(positions[i].x < barrierSize + barrierShift.x + 1.0f) && (positions[i].x > barrierSize + barrierShift.x) &&
+		(positions[i].z > -barrierSize + barrierShift.z) && (positions[i].z < barrierSize + +barrierShift.z)) {
+		normal = glm::vec3(-1.0f, 0.0f, 0.0f);
+		positions[i].x = barrierSize + barrierShift.x + 1.02f;
+	}
+
+	if (positions[i].y < (-boxSize + barrierSize * 2.0f) &&
+		(positions[i].z > -barrierSize + barrierShift.z - 1.0f) && (positions[i].z < -barrierSize + barrierShift.z) &&
+		(positions[i].x > -barrierSize + barrierShift.x) && (positions[i].x < barrierSize + +barrierShift.x)) {
+		normal = glm::vec3(0.0f, 0.0f, 1.0f);
+		positions[i].z = -barrierSize + barrierShift.z - 1.01f;
+	}
+	if (positions[i].y < (-boxSize + barrierSize * 2.0f) &&
+		(positions[i].z < barrierSize + barrierShift.z + 1.0f) && (positions[i].z > barrierSize + barrierShift.z) &&
+		(positions[i].x > -barrierSize + barrierShift.x) && (positions[i].x < barrierSize + +barrierShift.x)) {
+		normal = glm::vec3(0.0f, 0.0f, -1.0f);
+		positions[i].z = barrierSize + barrierShift.z + 1.02f;
 	}
 
 	if (normal != glm::vec3(0.0f, 0.0f, 0.0f)) {

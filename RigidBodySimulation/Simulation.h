@@ -46,7 +46,9 @@ private:
 	float random(float lower, float upper);
 	void ballInit();
 	void wallBuilder();
+	void barrierBuilder();
 	void wallCollision(size_t i);
+	void barrierCollision(size_t i);
 	void ballCollision(size_t i);
 	void Collision_CPU(size_t i);
 	void Collision_GPU();
@@ -73,14 +75,27 @@ private:
 	//Shader Variables
 	ProgramObject			shader;
 	Texture2D				texture;
+	std::unique_ptr<Mesh>	ball;
+	Camera					camera;
+
+	//wall
 	VertexArrayObject		wall;
 	ArrayBuffer				wallCoordinates;
 	IndexBuffer				wallIndices;
 	ArrayBuffer				wallNormals;
 	ArrayBuffer				wallTextures;
-	std::unique_ptr<Mesh>	ball;
-	Camera					camera;
 	glm::vec4				wallColor = glm::vec4(1, 1, 1, 0.1);
+
+	//barrier
+	VertexArrayObject		barrier;
+	ArrayBuffer				barrierCoordinates;
+	IndexBuffer				barrierIndices;
+	ArrayBuffer				barrierNormals;
+	ArrayBuffer				barrierTextures;
+	glm::vec4				barrierColor = glm::vec4(1.0f, 1.0f, 1.0f, 0.8f);
+	glm::vec3				barrierShift = glm::vec3(0, 0, 0);
+	float					barrierSize = 0;
+	bool					barrierIsOn = true;
 
 	//OpenCL variables
 	cl::Context context;

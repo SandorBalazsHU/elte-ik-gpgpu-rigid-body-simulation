@@ -3,6 +3,7 @@
 
 //The render loop
 void Simulation::Render() {
+	glEnable(GL_CULL_FACE); //Face test ON
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	shader.Use();
 	shader.SetTexture("texImage", 0, texture);
@@ -26,8 +27,22 @@ void Simulation::Render() {
 	//Clear the ball collision update checker
 	for (size_t i = 0; i < numberOfBalls; i++) collisionCheck[i] = true;
 
-	//Draw wall
+	//Face test OFF
 	glDisable(GL_CULL_FACE);
+
+	//Draw barrier
+	if (barrierIsOn) {
+		glm::mat4 barrierWorld = glm::translate(barrierShift);
+		shader.SetUniform("world", barrierWorld);
+		shader.SetUniform("worldIT", glm::transpose(glm::inverse(barrierWorld)));
+		shader.SetUniform("MVP", camera.GetViewProj() * barrierWorld);
+		shader.SetUniform("Kd", barrierColor);
+		barrier.Bind();
+		glDrawElements(GL_TRIANGLES, 32, GL_UNSIGNED_INT, 0);
+		barrier.Unbind();
+	}
+
+	//Draw wall
 	glm::mat4 wallWorld = glm::translate(glm::vec3(0, 0, 0));
 	shader.SetUniform("world", wallWorld);
 	shader.SetUniform("worldIT", glm::transpose(glm::inverse(wallWorld)));
@@ -54,6 +69,7 @@ void Simulation::Render() {
 		ImGui::SliderFloat("Ball Init Speed", &(ballInitSpeed), 0.0f, 1.0f);
 		if (ImGui::SliderFloat("Box Size", &(boxSize), 5.0f, 100.0f)) {
 			wallBuilder();
+			if (barrierIsOn) barrierBuilder();
 			Update_GPU(false);
 		}
 		if (ImGui::SliderInt("Number of Balls", &(numberOfBalls), 1, numberOfBallsArray-1)) Update_GPU(false);
@@ -76,8 +92,11 @@ void Simulation::Render() {
 
 		if (ImGui::Button("RESET")) {
 			wallBuilder();
+			if(barrierIsOn) barrierBuilder();
 			ballInit();
-		}
+		} ImGui::SameLine(150);
+		ImGui::Checkbox("Small Box", &barrierIsOn);
+
 	}
 	ImGui::End();
 }

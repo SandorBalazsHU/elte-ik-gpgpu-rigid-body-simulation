@@ -88,6 +88,10 @@ void Simulation::Update_GPU(bool updateAll) {
 	int ballCollisionRunGPU = 0;
 	if (ballCollisionRun) ballCollisionRunGPU = 1;
 	kernel.setArg(6, ballCollisionRunGPU);
+	kernel.setArg(7, barrierShift);
+	int barrierIsOnGPU = 0;
+	if (barrierIsOn) barrierIsOnGPU = 1;
+	kernel.setArg(8, barrierIsOnGPU);
 }
 
 void Simulation::Collision_GPU() {

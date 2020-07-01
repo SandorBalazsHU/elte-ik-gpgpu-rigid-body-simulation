@@ -18,6 +18,8 @@ Simulation::Simulation(void) {
 	resistance = 0.996f;
 	ballInitSpeed = 0.2f;
 	boxSize = 15.0f;
+	barrierShift = glm::vec3(0, -boxSize + ((boxSize) / 6) + 0.01f, 0);
+	float barrierSize = boxSize / 6;
 }
 
 //Destructor
@@ -42,8 +44,11 @@ bool Simulation::Init() {
 		{ 2, "vs_out_tex0" },	// VAO 2 chanel --> vs_in_tex0
 	});
 
-	//Building the walls modell
+	//Building the wall modell
 	wallBuilder();
+
+	//Building the barrier modell
+	barrierBuilder();
 
 	//Load Texture
 	texture.FromFile("texture.png");
@@ -100,6 +105,16 @@ void Simulation::KeyboardUp(SDL_KeyboardEvent& key) {
 
 void Simulation::MouseMove(SDL_MouseMotionEvent& mouse) {
 	camera.MouseMove(mouse);
+	if (barrierIsOn) {
+		if (mouse.state & SDL_BUTTON_LMASK) {
+			glm::vec3 shifted = barrierShift;
+			glm::vec3 shift = glm::vec3(mouse.xrel / 2.0f, 0, mouse.yrel / 2.0f);
+			shifted = shifted + shift;
+			if (shifted.x >= -boxSize + barrierSize && shifted.x <= boxSize - barrierSize) barrierShift.x = barrierShift.x + shift.x;
+			if (shifted.z >= -boxSize + barrierSize && shifted.z <= boxSize - barrierSize) barrierShift.z = barrierShift.z + shift.z;
+			Update_GPU(false);
+		}
+	}
 }
 
 void Simulation::MouseDown(SDL_MouseButtonEvent& mouse) {}

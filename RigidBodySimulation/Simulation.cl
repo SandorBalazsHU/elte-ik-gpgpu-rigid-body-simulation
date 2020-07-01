@@ -5,7 +5,9 @@ __kernel void update(
 	float boxSize,
 	float resistance,
 	float3 gravity,
-	int ballCollisionRun)
+	int ballCollisionRun,
+	float3 barrierShift,
+	int barrierIsOn)
 {
 	//The main counter
 	int i = get_global_id(0);
@@ -52,6 +54,49 @@ __kernel void update(
 		}
 	}
 
+	//Handle the ball to marrier collision and refraction
+	if (barrierIsOn == 1) {
+		float3 normal2 = (float3)(0.0f, 0.0f, 0.0f);
+		float barrierSize = boxSize / 6;
+
+		if (iPosition.y <= (-boxSize + barrierSize * 2.0f) + 1.0f &&
+			(iPosition.x >= -barrierSize + barrierShift.x) && (iPosition.x <= barrierSize + barrierShift.x) &&
+			(iPosition.z >= -barrierSize + barrierShift.z) && (iPosition.z <= barrierSize + +barrierShift.z)) {
+			normal2 = (float3)(0.0f, 1.0f, 0.0f);
+			iPosition.y = (-boxSize + barrierSize * 2.0f) + 1.01f;
+		}
+		if (iPosition.y < (-boxSize + barrierSize * 2.0f) &&
+			(iPosition.x > -barrierSize + barrierShift.x - 1.0f) && (iPosition.x < -barrierSize + barrierShift.x) &&
+			(iPosition.z > -barrierSize + barrierShift.z) && (iPosition.z < barrierSize + +barrierShift.z)) {
+			normal2 = (float3)(1.0f, 0.0f, 0.0f);
+			iPosition.x = -barrierSize + barrierShift.x - 1.01f;
+		}
+		if (iPosition.y < (-boxSize + barrierSize * 2.0f) &&
+			(iPosition.x < barrierSize + barrierShift.x + 1.0f) && (iPosition.x > barrierSize + barrierShift.x) &&
+			(iPosition.z > -barrierSize + barrierShift.z) && (iPosition.z < barrierSize + +barrierShift.z)) {
+			normal2 = (float3)(-1.0f, 0.0f, 0.0f);
+			iPosition.x = barrierSize + barrierShift.x + 1.02f;
+		}
+
+		if (iPosition.y < (-boxSize + barrierSize * 2.0f) &&
+			(iPosition.z > -barrierSize + barrierShift.z - 1.0f) && (iPosition.z < -barrierSize + barrierShift.z) &&
+			(iPosition.x > -barrierSize + barrierShift.x) && (iPosition.x < barrierSize + +barrierShift.x)) {
+			normal2 = (float3)(0.0f, 0.0f, 1.0f);
+			iPosition.z = -barrierSize + barrierShift.z - 1.01f;
+		}
+		if (iPosition.y < (-boxSize + barrierSize * 2.0f) &&
+			(iPosition.z < barrierSize + barrierShift.z + 1.0f) && (iPosition.z > barrierSize + barrierShift.z) &&
+			(iPosition.x > -barrierSize + barrierShift.x) && (iPosition.x < barrierSize + +barrierShift.x)) {
+			normal2 = (float3)(0.0f, 0.0f, -1.0f);
+			iPosition.z = barrierSize + barrierShift.z + 1.02f;
+		}
+
+		if (normal2.x != 0.0f || normal2.y != 0.0f || normal2.z != 0.0f) {
+			iVelocity = iVelocity - 2.0f * dot(normal2, iVelocity) * normal2;
+			iVelocity = ((iVelocity * resistance) * resistance) * resistance; //Plus resistance
+		}
+	}
+
 	//Handle the ball to wall collision and reflection
 	float3 normal = (float3)(0.0f, 0.0f, 0.0f);
 
@@ -82,7 +127,7 @@ __kernel void update(
 
 	if (normal.x != 0.0f || normal.y != 0.0f || normal.z != 0.0f) {
 		iVelocity = iVelocity - 2.0f * dot(normal, iVelocity) * normal;
-		iVelocity = iVelocity * resistance; //Plus resistance
+		iVelocity = ((iVelocity * resistance)* resistance)* resistance; //Plus resistance
 	}
 
 	vstore3(iVelocity, i, velocities);
