@@ -7,6 +7,8 @@
 *.rsuser
 *.suo
 *.user
+//Allow RigidBodySimulation.vcxproj.user
+!RigidBodySimulation/RigidBodySimulation.vcxproj.user
 *.userosscache
 *.sln.docstates
 
@@ -75,9 +77,9 @@ StyleCopReport.xml
 *.ilk
 *.meta
 *.obj
-*.iobj
 //Allow sphere.obj
 !RigidBodySimulation/sphere.obj
+*.iobj
 *.pch
 *.pdb
 *.ipdb
