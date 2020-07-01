@@ -1,3 +1,11 @@
+/*
+	GPU accelerated rigid body simulation with OpenGL and OpenCL.
+	Created by: Sándor Balázs - it.sandor.balazs@gmail.com
+	AX400
+	---
+	Own camera implementation with sphere coordniates.
+*/
+
 #include "Camera.h"
 #include <glm/gtc/matrix_transform.hpp>
 

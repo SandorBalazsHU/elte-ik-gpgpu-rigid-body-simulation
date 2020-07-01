@@ -1,3 +1,11 @@
+/*
+	GPU accelerated rigid body simulation with OpenGL and OpenCL.
+	Created by: Sándor Balázs - it.sandor.balazs@gmail.com
+	AX400
+	---
+	Fragment shader for the OpenGL visualisation.
+*/
+
 // pipeline-ból bejövõ per-fragment attribútumok
 in vec3 vs_out_pos;
 in vec3 vs_out_normal;

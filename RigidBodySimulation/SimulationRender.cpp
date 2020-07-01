@@ -1,3 +1,11 @@
+/*
+	GPU accelerated rigid body simulation with OpenGL and OpenCL.
+	Created by: Sándor Balázs - it.sandor.balazs@gmail.com
+	AX400
+	---
+	The main renderer cycle. Ball, Wall, Barrier and GUI rendering.
+*/
+
 #include "Simulation.h"
 #include "imgui\imgui.h"
 
@@ -26,7 +34,7 @@ void Simulation::Render() {
 		ball->draw();
 
 		//Debug messages
-		if (debug) std::cout << i << " - " << positions[i].x << ", " << positions[i].y << ", " << positions[i].z;
+		if (debug) std::cout << i << " - " << positions[i].x << ", " << positions[i].y << ", " << positions[i].z << std::endl;
 	}
 
 	//Clear the ball collision update checker

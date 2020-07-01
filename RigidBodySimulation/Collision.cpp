@@ -1,3 +1,12 @@
+/*
+	GPU accelerated rigid body simulation with OpenGL and OpenCL.
+	Created by: Sándor Balázs - it.sandor.balazs@gmail.com
+	AX400
+	---
+	The CPU collision and reflection implemenatation.
+	Implement the ball to wall, ball to barrier and ball to ball collision.
+*/
+
 #include "Simulation.h"
 
 //The full CPU Collision implementation

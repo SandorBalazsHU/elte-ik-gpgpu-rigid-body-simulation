@@ -1,4 +1,11 @@
-// Use cl::vector instead of STL version
+/*
+	GPU accelerated rigid body simulation with OpenGL and OpenCL.
+	Created by: Sándor Balázs - it.sandor.balazs@gmail.com
+	AX400
+	---
+	The OpenCL GPU accelerated collision and reflection mechanism initialisation, start and update.
+*/
+
 #define __NO_STD_VECTOR
 #define __CL_ENABLE_EXCEPTIONS
 

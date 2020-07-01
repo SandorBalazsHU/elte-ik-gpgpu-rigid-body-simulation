@@ -1,3 +1,11 @@
+/*
+	GPU accelerated rigid body simulation with OpenGL and OpenCL.
+	Created by: Sándor Balázs - it.sandor.balazs@gmail.com
+	AX400
+	---
+	The main simulation object. Simulation initialisation and Input handling.
+*/
+
 #include <ctime>
 #include "Simulation.h"
 

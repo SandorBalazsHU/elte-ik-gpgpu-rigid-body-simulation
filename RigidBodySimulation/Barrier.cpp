@@ -1,3 +1,11 @@
+/*
+	GPU accelerated rigid body simulation with OpenGL and OpenCL.
+	Created by: Sándor Balázs - it.sandor.balazs@gmail.com
+	AX400
+	---
+	The dynamic barrier modell generator.
+*/
+
 #include "simulation.h"
 
 //Create the barrier box modell dinamically by barrierSize

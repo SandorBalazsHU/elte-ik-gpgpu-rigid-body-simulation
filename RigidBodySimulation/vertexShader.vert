@@ -1,4 +1,10 @@
-#version 130
+/*
+	GPU accelerated rigid body simulation with OpenGL and OpenCL.
+	Created by: Sándor Balázs - it.sandor.balazs@gmail.com
+	AX400
+	---
+	Vertex shader for the OpenGL visualisation.
+*/
 
 // VBO-ból érkezõ változók
 in vec3 vs_in_pos;

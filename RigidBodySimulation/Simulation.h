@@ -1,3 +1,11 @@
+/*
+	GPU accelerated rigid body simulation with OpenGL and OpenCL.
+	Created by: Sándor Balázs - it.sandor.balazs@gmail.com
+	AX400
+	---
+	The main simulation object. Simulation initialisation and Input handling.
+*/
+
 #pragma once
 #include <ctime>
 #include <GL/glew.h>
@@ -41,7 +49,7 @@ public:
 	float fps[100] = { 0.0f };
 
 private:
-	//Debug mode
+	//Debug mode (Be carefull! The log files grose fast!)
 	bool debug = false;
 
 	//Private helper methods

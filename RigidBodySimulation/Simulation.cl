@@ -1,3 +1,12 @@
+/*
+	GPU accelerated rigid body simulation with OpenGL and OpenCL.
+	Created by: Sándor Balázs - it.sandor.balazs@gmail.com
+	AX400
+	---
+	The GPU collision and reflection implemenatation.
+	Implement the ball to wall, ball to barrier and ball to ball collision.
+*/
+
 __kernel void update( __global float* positions, __global float* velocities, int numberOfBalls,
 					  float boxSize, float resistance, float3 gravity, int ballCollisionRun,
 					  float3 barrierShift, int barrierIsOn) 
@@ -23,8 +32,8 @@ __kernel void update( __global float* positions, __global float* velocities, int
 				if (dist < 2.0f) {
 					//Becouse zero division.
 					if (dist <= 0.1f) {
-						iPosition = iPosition + iVelocity*2.0f;
-						jPosition = jPosition + jVelocity*2.0f;
+						iPosition = iPosition + iVelocity + 2.0f;
+						jPosition = jPosition + jVelocity + 2.0f;
 					}
 					float iLength = fast_length(iVelocity);
 					float3 p = iPosition - jPosition;
