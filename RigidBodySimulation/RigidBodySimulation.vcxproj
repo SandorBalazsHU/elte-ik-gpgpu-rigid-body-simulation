@@ -168,9 +168,6 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="GLconversions.cpp" />
     <ClCompile Include="GPU.cpp" />
-    <ClCompile Include="gShaderProgram.cpp" />
-    <ClCompile Include="gTimer.cpp" />
-    <ClCompile Include="gVertexBuffer.cpp" />
     <ClCompile Include="Mesh_OGL3.cpp" />
     <ClCompile Include="ObjParser_OGL3.cpp" />
     <ClCompile Include="ProgramObject.cpp" />
@@ -189,10 +186,6 @@
     <ClInclude Include="BufferObject.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="GLconversions.hpp" />
-    <ClInclude Include="GLUtils.hpp" />
-    <ClInclude Include="gShaderProgram.h" />
-    <ClInclude Include="gTimer.h" />
-    <ClInclude Include="gVertexBuffer.h" />
     <ClInclude Include="Mesh_OGL3.h" />
     <ClInclude Include="ObjParser_OGL3.h" />
     <ClInclude Include="ProgramObject.h" />

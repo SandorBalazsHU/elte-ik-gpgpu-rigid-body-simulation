@@ -99,9 +99,9 @@ void Simulation::KeyboardUp(SDL_KeyboardEvent& key) {
 void Simulation::MouseMove(SDL_MouseMotionEvent& mouse) {
 	camera.MouseMove(mouse);
 	if (barrierIsOn) {
-		if (mouse.state & SDL_BUTTON_LMASK) {
+		if (mouse.state & SDL_BUTTON_RMASK) {
 			glm::vec3 shifted = barrierShift;
-			glm::vec3 shift = glm::vec3(mouse.xrel / 2.0f, 0, mouse.yrel / 2.0f);
+			glm::vec3 shift = glm::vec3(mouse.xrel / 4.0f, 0, mouse.yrel / 4.0f);
 			shifted = shifted + shift;
 			if (shifted.x >= -boxSize + barrierSize && shifted.x <= boxSize - barrierSize) barrierShift.x = barrierShift.x + shift.x;
 			if (shifted.z >= -boxSize + barrierSize && shifted.z <= boxSize - barrierSize) barrierShift.z = barrierShift.z + shift.z;

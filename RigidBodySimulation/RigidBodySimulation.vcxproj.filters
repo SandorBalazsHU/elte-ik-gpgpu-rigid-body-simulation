@@ -25,9 +25,6 @@
     <ClCompile Include="VertexArrayObject.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
-    <ClCompile Include="GLconversions.cpp">
-      <Filter>Utilities</Filter>
-    </ClCompile>
     <ClCompile Include="Mesh_OGL3.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
@@ -35,9 +32,6 @@
       <Filter>Utilities</Filter>
     </ClCompile>
     <ClCompile Include="ProgramObject.cpp">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderObject.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
     <ClCompile Include="Simulation.cpp">
@@ -70,33 +64,24 @@
     <ClCompile Include="GPU.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gTimer.cpp">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="gVertexBuffer.cpp">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="gShaderProgram.cpp">
-      <Filter>Utilities</Filter>
-    </ClCompile>
     <ClCompile Include="Barrier.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLconversions.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderObject.cpp">
+      <Filter>Utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProgramObject.h">
       <Filter>Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderObject.h">
-      <Filter>Utilities</Filter>
-    </ClInclude>
     <ClInclude Include="VertexArrayObject.h">
       <Filter>Utilities</Filter>
     </ClInclude>
     <ClInclude Include="BufferObject.h">
-      <Filter>Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="GLconversions.hpp">
       <Filter>Utilities</Filter>
     </ClInclude>
     <ClInclude Include="Mesh_OGL3.h">
@@ -135,16 +120,10 @@
     <ClInclude Include="T:\OGLPack\include\imgui\imgui_internal.h">
       <Filter>Imgui</Filter>
     </ClInclude>
-    <ClInclude Include="gTimer.h">
+    <ClInclude Include="ShaderObject.h">
       <Filter>Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="gVertexBuffer.h">
-      <Filter>Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="GLUtils.hpp">
-      <Filter>Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="gShaderProgram.h">
+    <ClInclude Include="GLconversions.hpp">
       <Filter>Utilities</Filter>
     </ClInclude>
   </ItemGroup>

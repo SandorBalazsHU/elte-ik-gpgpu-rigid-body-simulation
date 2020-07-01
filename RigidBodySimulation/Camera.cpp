@@ -1,8 +1,8 @@
 #include "Camera.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-Camera::Camera(void) : m_eye(0.0f, 0.0f, 0.0f), m_at(0.0f), m_up(0.0f, 1.0f, 0.0f), m_goFw(0), m_goRight(0), m_eye_sphare(100.0f, 20.0f, 20.0f) {
-	SetView( glm::vec3(90,90,90), glm::vec3(0,0,0), glm::vec3(0,1,0));
+Camera::Camera(void) : m_eye(0.0f, 0.0f, 0.0f), m_at(0.0f), m_up(0.0f, 1.0f, 0.0f), m_goFw(0), m_goRight(0), m_eye_sphare(77.94228634f, 0.78539816f, 0.95531661f) {
+	SetView( glm::vec3(45,45,45), glm::vec3(0,0,0), glm::vec3(0,1,0));
 	m_dist = glm::length( m_at - m_eye );	
 	SetProj(45.0f, 640/480.0f, 0.001f, 1000.0f);
 }
@@ -59,7 +59,7 @@ void Camera::KeyboardDown(SDL_KeyboardEvent& key){}
 void Camera::KeyboardUp(SDL_KeyboardEvent& key){}
 
 void Camera::MouseMove(SDL_MouseMotionEvent& mouse) {
-	if ( mouse.state & SDL_BUTTON_RMASK ) {
+	if ( mouse.state & SDL_BUTTON_LMASK ) {
 		SphereUpdate(0, mouse.xrel/100.0f, mouse.yrel/100.0f);
 	}
 }
