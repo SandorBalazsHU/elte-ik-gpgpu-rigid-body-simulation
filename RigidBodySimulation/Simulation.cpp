@@ -78,7 +78,7 @@ void Simulation::ballInit() {
 		collisionCheck[i] = true;
 	}
 	//Copy datas to GPU
-	if (CLisActive) UpdateCL();
+	if (GPU_isActive) Update_GPU();
 }
 
 void Simulation::Clean() {

@@ -50,8 +50,9 @@ private:
 	void ballCollision(size_t i);
 	void Collision_CPU(size_t i);
 	void Collision_GPU();
-	void UpdateCL();
-	bool CLisActive = true;
+	void Update_GPU(bool updateAll = true);
+	void UpdateVelocitiesFrom_GPU();
+	bool GPU_isActive = true;
 
 	//Simulation variables
 	int numberOfBalls = 8;
@@ -60,7 +61,7 @@ private:
 	float resistance;
 	float ballInitSpeed;
 	bool run = false;
-	bool ballCollisionRun = false;
+	bool ballCollisionRun = true;
 	bool randomXZ = false;
 	bool randomY = false;
 	static const int numberOfBallsArray = 1500;

@@ -8,12 +8,12 @@ void Simulation::Render() {
 	shader.SetTexture("texImage", 0, texture);
 
 	//GPU Collision handler
-	if (run && CLisActive) Collision_GPU();
+	if (run && GPU_isActive) Collision_GPU();
 
 	//The ball handler loop
 	for (size_t i = 0; i < numberOfBalls; i++) {
 		//CPU Collision handler
-		if (run && !CLisActive) Collision_CPU(i);
+		if (run && !GPU_isActive) Collision_CPU(i);
 		//Ball Drawer
 		glm::mat4 suzanne1World = glm::translate(positions[i]);
 		shader.SetUniform("world", suzanne1World);
@@ -43,22 +43,37 @@ void Simulation::Render() {
 	//UI Drawer
 	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);
 	ImGui::SetNextWindowSize(ImVec2(500, 240), ImGuiCond_FirstUseEver);
-	if (ImGui::Begin("Rigid Body Simulation"))
-	{
+	if (ImGui::Begin("Rigid Body Simulation")) {
 		ImGui::Text("Rigid Body Simulation");
 		ImGui::Text("By: Sandor Balazs");
+
 		ImGui::PlotLines("FPS", fps, IM_ARRAYSIZE(fps), 0, "FPS", 0.0f, 100.0f, ImVec2(0, 80));
-		ImGui::SliderFloat3("Gravity", &(gravity[0]), -0.02f, 0.02f);
-		ImGui::SliderFloat("Resistance", &(resistance), 0.9f, 1.0f);
-		ImGui::SliderFloat("ballInitSpeed", &(ballInitSpeed), 0.0f, 1.0f);
-		if (ImGui::SliderFloat("boxSize", &(boxSize), 5.0f, 100.0f)) wallBuilder();
-		ImGui::SliderInt("numberOfBalls", &(numberOfBalls), 1, numberOfBallsArray-1);
+
+		if (ImGui::SliderFloat3("Gravity", &(gravity[0]), -0.02f, 0.02f)) Update_GPU(false);
+		if (ImGui::SliderFloat("Resistance", &(resistance), 0.9f, 1.0f)) Update_GPU(false);
+		ImGui::SliderFloat("Ball Init Speed", &(ballInitSpeed), 0.0f, 1.0f);
+		if (ImGui::SliderFloat("Box Size", &(boxSize), 5.0f, 100.0f)) {
+			wallBuilder();
+			Update_GPU(false);
+		}
+		if (ImGui::SliderInt("Number of Balls", &(numberOfBalls), 1, numberOfBallsArray-1)) Update_GPU(false);
+		
 		ImGui::Checkbox("Random XZ", &randomXZ); ImGui::SameLine(150);
 		ImGui::Checkbox("Random Y", &randomY);
 		ImGui::Checkbox("RUN", &run); ImGui::SameLine(150);
-		ImGui::Checkbox("Collision", &ballCollisionRun);
-		ImGui::Checkbox("GPU Computing", &CLisActive);
-		static int clicked = 0;
+		if (ImGui::Checkbox("Collision", &ballCollisionRun)) Update_GPU(false);
+
+		ImGui::Text("Collision calculation on:"); ImGui::SameLine();
+		static int radioValue = 0;
+		if (ImGui::RadioButton("GPU", &radioValue, 0)) if (radioValue == 0) {
+			GPU_isActive = true;
+			Update_GPU(true);
+		} ImGui::SameLine();
+		if (ImGui::RadioButton("CPU", &radioValue, 1)) if (radioValue == 1) {
+			GPU_isActive = false;
+			UpdateVelocitiesFrom_GPU();
+		}
+
 		if (ImGui::Button("RESET")) {
 			wallBuilder();
 			ballInit();

@@ -76,6 +76,8 @@ StyleCopReport.xml
 *.meta
 *.obj
 *.iobj
+//Allow sphere.obj
+!RigidBodySimulation/sphere.obj
 *.pch
 *.pdb
 *.ipdb

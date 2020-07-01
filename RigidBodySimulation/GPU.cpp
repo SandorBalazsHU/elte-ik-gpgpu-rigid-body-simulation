@@ -72,14 +72,14 @@ bool Simulation::InitCL() {
 	return true;
 }
 
-void Simulation::UpdateCL() {
+void Simulation::Update_GPU(bool updateAll) {
 	//Write the current vectors to GPU
-	commandQueue.enqueueWriteBuffer(CLpositions, CL_TRUE, 0, numberOfBalls * sizeof(glm::vec3), positions);
-	commandQueue.enqueueWriteBuffer(CLvelocities, CL_TRUE, 0, numberOfBalls * sizeof(glm::vec3), velocities);
-	//commandQueue.enqueueWriteBuffer(CLcollisionCheck, CL_TRUE, 0, numberOfBalls * sizeof(bool), collisionCheck);
-	kernel.setArg(0, CLpositions);
-	kernel.setArg(1, CLvelocities);
-	//kernel.setArg(2, CLcollisionCheck);
+	if (updateAll) {
+		commandQueue.enqueueWriteBuffer(CLpositions, CL_TRUE, 0, numberOfBalls * sizeof(glm::vec3), positions);
+		commandQueue.enqueueWriteBuffer(CLvelocities, CL_TRUE, 0, numberOfBalls * sizeof(glm::vec3), velocities);
+		kernel.setArg(0, CLpositions);
+		kernel.setArg(1, CLvelocities);
+	}
 	//Set the current variables
 	kernel.setArg(2, numberOfBalls);
 	kernel.setArg(3, boxSize);
@@ -109,4 +109,8 @@ void Simulation::Collision_GPU() {
 		std::cerr << error.what() << std::endl;
 		exit(1);
 	}
+}
+
+void Simulation::UpdateVelocitiesFrom_GPU() {
+	commandQueue.enqueueReadBuffer(CLvelocities, CL_TRUE, 0, numberOfBalls * sizeof(glm::vec3), velocities);
 }
