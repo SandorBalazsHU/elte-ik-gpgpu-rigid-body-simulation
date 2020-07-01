@@ -3,6 +3,7 @@
 
 //The render loop
 void Simulation::Render() {
+
 	glEnable(GL_CULL_FACE); //Face test ON
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	shader.Use();
@@ -15,13 +16,17 @@ void Simulation::Render() {
 	for (size_t i = 0; i < numberOfBalls; i++) {
 		//CPU Collision handler
 		if (run && !GPU_isActive) Collision_CPU(i);
+
 		//Ball Drawer
-		glm::mat4 suzanne1World = glm::translate(positions[i]);
-		shader.SetUniform("world", suzanne1World);
-		shader.SetUniform("worldIT", glm::transpose(glm::inverse(suzanne1World)));
-		shader.SetUniform("MVP", camera.GetViewProj() * suzanne1World);
+		glm::mat4 wallWorld = glm::translate(positions[i]);
+		shader.SetUniform("world", wallWorld);
+		shader.SetUniform("worldIT", glm::transpose(glm::inverse(wallWorld)));
+		shader.SetUniform("MVP", camera.GetViewProj() * wallWorld);
 		shader.SetUniform("Kd", colors[i]);
 		ball->draw();
+
+		//Debug messages
+		if (debug) std::cout << i << " - " << positions[i].x << ", " << positions[i].y << ", " << positions[i].z;
 	}
 
 	//Clear the ball collision update checker

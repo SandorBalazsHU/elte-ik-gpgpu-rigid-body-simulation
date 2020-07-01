@@ -3,8 +3,7 @@
 #include <SDL.h>
 #include <glm/glm.hpp>
 
-class Camera
-{
+class Camera {
 public:
 	Camera(void);
 	Camera(glm::vec3 _eye, glm::vec3 _at, glm::vec3 _up);
@@ -45,57 +44,42 @@ private:
 
 	void SphereUpdate(float r, float a, float b);
 
-	/// <summary>
-	/// The view matrix of the camera
-	/// </summary>
+	//The view matrix of the camera
 	glm::mat4	m_viewMatrix;
 
 	glm::mat4	m_matViewProj;
 
-	/// <summary>
-	/// The camera position.
-	/// </summary>
+	//The camera position.
 	glm::vec3	m_eye;
 
-	/// <summary>
-	/// The camera position in the sphere.
-	/// </summary>
+	//The camera position in the sphere.
 	glm::vec3	m_eye_sphare;
 
-	/// <summary>
-	/// The vector pointing upwards
-	/// </summary>
+
+	//The vector pointing upwards
 	glm::vec3	m_up;
 
-	/// <summary>
-	/// The camera look at point.
-	/// </summary>
+
+	//The camera look at point.
 	glm::vec3	m_at;
 
-	/// <summary>
-	/// The u spherical coordinate of the spherical coordinate pair (u,v) denoting the
-	/// current viewing direction from the view position m_eye. 
-	/// </summary>
+	//The u spherical coordinate of the spherical coordinate pair (u,v) denoting the
+	//current viewing direction from the view position m_eye. 
 	float	m_u;
 
-	/// <summary>
-	/// The v spherical coordinate of the spherical coordinate pair (u,v) denoting the
-	/// current viewing direction from the view position m_eye. 
-	/// </summary>
+
+	//The v spherical coordinate of the spherical coordinate pair (u,v) denoting the
+	//current viewing direction from the view position m_eye. 
 	float	m_v;
 
-	/// <summary>
-	/// The distance of the look at point from the camera. 
-	/// </summary>
+
+	//The distance of the look at point from the camera. 
 	float	m_dist;
 
-	/// <summary>
-	/// The unit vector pointing towards the viewing direction.
-	/// </summary>
+	//The unit vector pointing towards the viewing direction.
 	glm::vec3	m_fw;
-	/// <summary>
-	/// The unit vector pointing to the 'right'
-	/// </summary>
+
+	//The unit vector pointing to the 'right'
 	glm::vec3	m_st;
 
 	glm::mat4	m_matProj;

@@ -1,11 +1,4 @@
-#include <math.h>
-#include <vector>
-#include <array>
-#include <list>
-#include <tuple>
-#include <cstdlib>
 #include <ctime>
-
 #include "Simulation.h"
 
 //Constructor
@@ -132,4 +125,11 @@ void Simulation::Resize(int _w, int _h) {
 float Simulation::random(float lower, float upper) {
 	float random = lower + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (upper - lower)));
 	return random;
+}
+
+std::string currentDateTime() {
+	time_t now = time(0);
+	std::string ret = ctime(&now);
+	ret[ret.length() - 1] = ' ';
+	return ret;
 }

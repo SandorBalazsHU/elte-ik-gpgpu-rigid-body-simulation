@@ -1,7 +1,5 @@
-#include <iostream>
 #include "Camera.h"
 #include <glm/gtc/matrix_transform.hpp>
-#include <math.h>
 
 Camera::Camera(void) : m_eye(0.0f, 0.0f, 0.0f), m_at(0.0f), m_up(0.0f, 1.0f, 0.0f), m_goFw(0), m_goRight(0), m_eye_sphare(100.0f, 20.0f, 20.0f) {
 	SetView( glm::vec3(90,90,90), glm::vec3(0,0,0), glm::vec3(0,1,0));
@@ -67,11 +65,13 @@ void Camera::MouseMove(SDL_MouseMotionEvent& mouse) {
 }
 
 void Camera::MouseWheel(SDL_MouseWheelEvent& wheel) {
-	if (wheel.y > 0) {		// scroll up
-		SphereUpdate(wheel.y*2, 0, 0);
+	// scroll up
+	if (wheel.y > 0) {
+		SphereUpdate(wheel.y*2.0f, 0, 0);
 	}
-	else if (wheel.y < 0) {	// scroll down
-		SphereUpdate(wheel.y*2, 0, 0);
+	// scroll down
+	else if (wheel.y < 0) {
+		SphereUpdate(wheel.y*2.0f, 0, 0);
 	}
 }
 

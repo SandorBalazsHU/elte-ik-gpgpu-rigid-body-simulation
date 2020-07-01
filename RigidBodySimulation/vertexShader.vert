@@ -16,8 +16,7 @@ uniform mat4 world;
 uniform mat4 worldIT;
 uniform mat4 MVP;
 
-void main()
-{
+void main() {
 	gl_Position = MVP * vec4( vs_in_pos, 1 );
 
 	vs_out_pos = (world * vec4( vs_in_pos, 1 )).xyz;

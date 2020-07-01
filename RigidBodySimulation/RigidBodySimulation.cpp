@@ -1,9 +1,5 @@
-#pragma once
-
 #include <iostream>
 #include <sstream>
-#include <cstdio>
-#include <ctime>
 
 #include <GL/glew.h>
 #include <SDL.h>
@@ -12,23 +8,11 @@
 #include "imgui\imgui.h"
 #include "imgui\imgui_impl_sdl_gl3.h"
 
-#include "simulation.h"
-
-char* currentDateTime() {
-	time_t rawtime;
-	struct tm* timeinfo;
-	char buffer[80];
-
-	time(&rawtime);
-	timeinfo = localtime(&rawtime);
-
-	strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", timeinfo);
-	return buffer;
-}
+#include "Simulation.h"
 
 void exitProgram() {
 	SDL_Quit();
-	std::cout << currentDateTime() << " Program terminated correctly" << std::endl;
+	std::cout << currentDateTime() << "- Program terminated correctly" << std::endl;
 }
 
 int main(int argc, char* args[])
@@ -42,7 +26,7 @@ int main(int argc, char* args[])
 
 	//SDL Init
 	if (SDL_Init(SDL_INIT_VIDEO) == -1)	{
-		std::cerr << currentDateTime() << " [SDL_Init ERROR]: " << SDL_GetError() << std::endl;
+		std::cerr << currentDateTime() << "- [SDL_Init ERROR]: " << SDL_GetError() << std::endl;
 		return 1;
 	}
 
@@ -62,7 +46,7 @@ int main(int argc, char* args[])
 	window = SDL_CreateWindow("Rigid Body Simulation", 100, 100, 640, 480,
 	SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED);
 	if (window == 0) {
-		std::cerr << currentDateTime() <<" [WINDOW CREATION ERROR]: " << SDL_GetError() << std::endl;
+		std::cerr << currentDateTime() << "- [WINDOW CREATION ERROR]: " << SDL_GetError() << std::endl;
 		return 1;
 	}
 
@@ -72,7 +56,7 @@ int main(int argc, char* args[])
 	//Create OpenGL context
 	SDL_GLContext context = SDL_GL_CreateContext(window);
 	if (context == 0) {
-		std::cerr << currentDateTime() << "[OpenGL context creation ERROR]: " << SDL_GetError() << std::endl;
+		std::cerr << currentDateTime() << "- [OpenGL context creation ERROR]: " << SDL_GetError() << std::endl;
 		return 1;
 	}
 
@@ -82,7 +66,7 @@ int main(int argc, char* args[])
 	//GLEW start
 	GLenum error = glewInit();
 	if (error != GLEW_OK) {
-		std::cerr << "[GLEW start error]" << std::endl;
+		std::cerr << currentDateTime() << "- [GLEW start error]" << std::endl;
 		return 1;
 	}
 
@@ -90,12 +74,12 @@ int main(int argc, char* args[])
 	int glVersion[2] = { -1, -1 };
 	glGetIntegerv(GL_MAJOR_VERSION, &glVersion[0]);
 	glGetIntegerv(GL_MINOR_VERSION, &glVersion[1]);
-	std::cout << currentDateTime() <<  " Running OpenGL " << glVersion[0] << "." << glVersion[1] << std::endl;
+	std::cout << currentDateTime() <<  "- Running OpenGL " << glVersion[0] << "." << glVersion[1] << std::endl;
 
 	if (glVersion[0] == -1 && glVersion[1] == -1) {
 		SDL_GL_DeleteContext(context);
 		SDL_DestroyWindow(window);
-		std::cerr << currentDateTime() << "[OGL context error]" << std::endl;
+		std::cerr << currentDateTime() << "- [OGL context error]" << std::endl;
 		return 1;
 	}
 
@@ -110,7 +94,7 @@ int main(int argc, char* args[])
 	if (!simulation.InitCL()) {
 		SDL_GL_DeleteContext(context);
 		SDL_DestroyWindow(window);
-		std::cerr << currentDateTime() << "[OpenCL INIT ERROR]" << std::endl;
+		std::cerr << currentDateTime() << "- [OpenCL INIT ERROR]" << std::endl;
 		return 1;
 	}
 
@@ -118,7 +102,7 @@ int main(int argc, char* args[])
 	if (!simulation.Init()) {
 		SDL_GL_DeleteContext(context);
 		SDL_DestroyWindow(window);
-		std::cerr << currentDateTime() << "[Simulation ERROR]" << std::endl;
+		std::cerr << currentDateTime() << "- [Simulation ERROR]" << std::endl;
 		return 1;
 	}
 

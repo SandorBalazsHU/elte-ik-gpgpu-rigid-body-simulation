@@ -36,11 +36,14 @@ bool Simulation::InitCL() {
 			} catch (cl::Error error) {}
 		}
 
-		if (!create_context_success) throw cl::Error(CL_INVALID_CONTEXT, "Failed to create CL/GL shared context");
+		if (!create_context_success) {
+			std::cerr << currentDateTime() << "- Failed to create CL/GL shared context";
+			throw cl::Error(CL_INVALID_CONTEXT, "Failed to create CL/GL shared context");
+		}
 
 		// Create Command Queue
 		cl::vector<cl::Device> devices = context.getInfo<CL_CONTEXT_DEVICES>();
-		std::cout << devices[0].getInfo<CL_DEVICE_NAME>() << std::endl;
+		std::cout << currentDateTime() <<"- GPU detected: " << devices[0].getInfo<CL_DEVICE_NAME>() << std::endl;
 		commandQueue = cl::CommandQueue(context, devices[0]);
 
 		// Read source file, load the kernel
@@ -54,7 +57,7 @@ bool Simulation::InitCL() {
 			program.build(devices);
 		}
 		catch (cl::Error error) {
-			std::cerr << program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(devices[0]) << std::endl;
+			std::cerr << currentDateTime() << program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(devices[0]) << std::endl;
 			throw error;
 		}
 
@@ -63,10 +66,9 @@ bool Simulation::InitCL() {
 
 		CLvelocities = cl::Buffer(context, CL_MEM_READ_WRITE, numberOfBallsArray * sizeof(glm::vec3));
 		CLpositions = cl::Buffer(context, CL_MEM_READ_WRITE, numberOfBallsArray * sizeof(glm::vec3));
-		//CLcollisionCheck = cl::Buffer(context, CL_MEM_READ_WRITE, numberOfBallsArray * sizeof(bool));
 	}
 	catch (cl::Error error)	{
-		std::cerr << error.what() << std::endl;
+		std::cerr << currentDateTime() << error.what() << std::endl;
 		return false;
 	}
 	return true;
@@ -80,15 +82,18 @@ void Simulation::Update_GPU(bool updateAll) {
 		kernel.setArg(0, CLpositions);
 		kernel.setArg(1, CLvelocities);
 	}
+
 	//Set the current variables
 	kernel.setArg(2, numberOfBalls);
 	kernel.setArg(3, boxSize);
 	kernel.setArg(4, resistance);
 	kernel.setArg(5, gravity);
+
 	int ballCollisionRunGPU = 0;
 	if (ballCollisionRun) ballCollisionRunGPU = 1;
 	kernel.setArg(6, ballCollisionRunGPU);
 	kernel.setArg(7, barrierShift);
+
 	int barrierIsOnGPU = 0;
 	if (barrierIsOn) barrierIsOnGPU = 1;
 	kernel.setArg(8, barrierIsOnGPU);
@@ -110,7 +115,7 @@ void Simulation::Collision_GPU() {
 		commandQueue.enqueueReadBuffer(CLpositions, CL_TRUE, 0, numberOfBalls * sizeof(glm::vec3), positions);
 	}
 	catch (cl::Error error) {
-		std::cerr << error.what() << std::endl;
+		std::cerr << currentDateTime() << error.what() << std::endl;
 		exit(1);
 	}
 }

@@ -1,7 +1,6 @@
 #pragma once
+#include <ctime>
 #include <GL/glew.h>
-
-#include <memory>
 
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -42,6 +41,9 @@ public:
 	float fps[100] = { 0.0f };
 
 private:
+	//Debug mode
+	bool debug = false;
+
 	//Private helper methods
 	float random(float lower, float upper);
 	void ballInit();
@@ -105,3 +107,4 @@ private:
 	cl::Buffer CLvelocities, CLpositions, CLcollisionCheck;
 };
 
+std::string currentDateTime();

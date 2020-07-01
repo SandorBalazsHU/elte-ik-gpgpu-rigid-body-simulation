@@ -1,9 +1,10 @@
 #include "Simulation.h"
 
+//The full CPU Collision implementation
 void Simulation::Collision_CPU(size_t i) {
 	velocities[i] = velocities[i] - gravity;
 	velocities[i] = velocities[i] * resistance;
-	positions[i] = positions[i] + velocities[i];
+	positions[i]  = positions[i] + velocities[i];
 	if (ballCollisionRun) ballCollision(i);
 	if(barrierIsOn) barrierCollision(i);
 	wallCollision(i);
@@ -104,12 +105,10 @@ void Simulation::ballCollision(size_t i) {
 				glm::vec3 normal = ((velocities[i] - velocities[j]) * n) * n;
 				velocities[i] = velocities[i] - normal;
 				velocities[j] = velocities[j] + normal;
-				velocities[i] = velocities[i] * (resistance * resistance); //Plus resistance
-				velocities[j] = velocities[j] * (resistance * resistance); //Plus resistance
+				velocities[i] = velocities[i] * (resistance * resistance);
+				velocities[j] = velocities[j] * (resistance * resistance);
 				positions[i] = positions[i] + (((2.0f - distance) / glm::length(velocities[i])) * velocities[i]);
 				positions[j] = positions[j] + (((2.0f - distance) / glm::length(velocities[j])) * velocities[j]);
-				//if (glm::length(velocities[i]) <= 0.1f) velocities[i] = glm::vec3(0);
-				//if (glm::length(velocities[j]) <= 0.1f) velocities[j] = glm::vec3(0);
 			}
 		}
 	}

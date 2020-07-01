@@ -1,13 +1,6 @@
-__kernel void update(
-	__global float* positions,
-	__global float* velocities,
-	int numberOfBalls,
-	float boxSize,
-	float resistance,
-	float3 gravity,
-	int ballCollisionRun,
-	float3 barrierShift,
-	int barrierIsOn)
+__kernel void update( __global float* positions, __global float* velocities, int numberOfBalls,
+					  float boxSize, float resistance, float3 gravity, int ballCollisionRun,
+					  float3 barrierShift, int barrierIsOn) 
 {
 	//The main counter
 	int i = get_global_id(0);
