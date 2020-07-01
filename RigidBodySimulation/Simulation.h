@@ -55,7 +55,7 @@ private:
 	bool GPU_isActive = true;
 
 	//Simulation variables
-	int numberOfBalls = 8;
+	int numberOfBalls = 25;
 	float boxSize;
 	glm::vec3 gravity;
 	float resistance;

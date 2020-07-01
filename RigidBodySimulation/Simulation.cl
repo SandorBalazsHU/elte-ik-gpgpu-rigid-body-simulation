@@ -57,27 +57,27 @@ __kernel void update(
 
 	if (iPosition.y <= -boxSize + 1.0f) {
 		normal = (float3)(0.0f, 1.0f, 0.0f);
-		iPosition.y = -boxSize + 1.1f;
+		iPosition.y = -boxSize + 1.01f;
 	}
 	if (iPosition.y >= boxSize - 1.0f) {
 		normal = (float3)(0.0f, -1.0f, 0.0f);
-		iPosition.y = boxSize - 1.1f;
+		iPosition.y = boxSize - 1.01f;
 	}
 	if (iPosition.x <= -boxSize + 1.0f) {
 		normal = (float3)(1.0f, 0.0f, 0.0f);
-		iPosition.x = -boxSize + 1.1f;
+		iPosition.x = -boxSize + 1.01f;
 	}
 	if (iPosition.x >= boxSize - 1.0f) {
 		normal = (float3)(-1.0f, 0.0f, 0.0f);
-		iPosition.x = boxSize - 1.1f;
+		iPosition.x = boxSize - 1.01f;
 	}
 	if (iPosition.z <= -boxSize + 1.0f) {
 		normal = (float3)(0.0f, 0.0f, 1.0f);
-		iPosition.z = -boxSize + 1.1f;
+		iPosition.z = -boxSize + 1.01f;
 	}
 	if (iPosition.z >= boxSize - 1.0f) {
 		normal = (float3)(0.0f, 0.0f, -1.0f);
-		iPosition.z = boxSize - 1.1f;
+		iPosition.z = boxSize - 1.01f;
 	}
 
 	if (normal.x != 0.0f || normal.y != 0.0f || normal.z != 0.0f) {

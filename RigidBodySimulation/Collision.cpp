@@ -14,33 +14,32 @@ void Simulation::wallCollision(size_t i) {
 
 	if (positions[i].y <= -boxSize + 1.0f) {
 		normal = glm::vec3(0.0f, 1.0f, 0.0f);
-		positions[i].y = -boxSize + 1.1f;
+		positions[i].y = -boxSize + 1.01f;
 	}
 	if (positions[i].y >= boxSize - 1.0f) {
 		normal = glm::vec3(0.0f, -1.0f, 0.0f);
-		positions[i].y = boxSize - 1.1f;
+		positions[i].y = boxSize - 1.01f;
 	}
 	if (positions[i].x <= -boxSize + 1.0f) {
 		normal = glm::vec3(1.0f, 0.0f, 0.0f);
-		positions[i].x = -boxSize + 1.1f;
+		positions[i].x = -boxSize + 1.01f;
 	}
 	if (positions[i].x >= boxSize - 1.0f) {
 		normal = glm::vec3(-1.0f, 0.0f, 0.0f);
-		positions[i].x = boxSize - 1.1f;
+		positions[i].x = boxSize - 1.01f;
 	}
 	if (positions[i].z <= -boxSize + 1.0f) {
 		normal = glm::vec3(0.0f, 0.0f, 1.0f);
-		positions[i].z = -boxSize + 1.1f;
+		positions[i].z = -boxSize + 1.01f;
 	}
 	if (positions[i].z >= boxSize - 1.0f) {
 		normal = glm::vec3(0.0f, 0.0f, -1.0f);
-		positions[i].z = boxSize - 1.1f;
+		positions[i].z = boxSize - 1.01f;
 	}
 
 	if (normal != glm::vec3(0.0f, 0.0f, 0.0f)) {
 		velocities[i] = glm::reflect(velocities[i], normal);
-		//Plus resistance
-		velocities[i] = velocities[i] * (resistance);
+		velocities[i] = ((velocities[i] * resistance) * resistance) * resistance;	//Plus resistance
 	}
 }
 
