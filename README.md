@@ -50,9 +50,11 @@
 ![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/Img07.jpg)
 
 ## The Theoretical background:
-I stored the ball-s positions in float3 and their velocities in an another float3 vector. The new position is the position vector and the velocity vectors sum.
+I stored the balls positions in float3 and their velocities in an another float3 vector.
+The new position is the position vector and the velocity vectors sum.
 I modelld the gravity vith an another float3 vector and i subtract the velocitiy vector with the gravity vector.
 I add an air resistance vector when slow down.
+
 ```
     glm::vec3 positions[numberOfBalls];
     glm::vec3 velocities[numberOfBalls];
@@ -65,18 +67,24 @@ I add an air resistance vector when slow down.
     if(barrierIsOn) barrierCollision(i);
     wallCollision(i);
 ```
+#### The processing loop
+![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/loop.jpg)
+
+### The Ball to Wall collision:
+![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/mat3.jpg)
+
+![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/mat4.jpg)
+
+## The ball to Ball Collision (The first way, i used this for GPU):
 
 ![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/collision.gif)
 
 ![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/mat1.jpg)
 
+## The ball to Ball Collision (The second way, i used this for CPU):
+
 ![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/math2.jpg)
 
-![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/loop.jpg)
-
-![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/mat3.jpg)
-
-![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/mat4.jpg)
 
 ### Used sources:
 * Ball to wall reflection: https://math.stackexchange.com/questions/13261/how-to-get-a-reflection-vector
