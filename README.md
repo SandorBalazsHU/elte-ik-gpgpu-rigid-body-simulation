@@ -83,7 +83,7 @@ I add an air resistance vector when slow down.
 
 ## The ball to Ball Collision (The second way, i used this for CPU):
 
-![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/math2.jpg)
+![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/mat2.jpg)
 
 
 ### Used sources:
