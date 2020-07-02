@@ -49,6 +49,20 @@
 
 ![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/Img07.jpg)
 
+## The Theoretical background:
+![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/collision.gif)
+![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/mat1.jpg)
+![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/math2.jpg)
+![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/loop.jpg)
+![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/mat3.jpg)
+![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/mat4.jpg)
+
+### Used sources:
+* Ball to wall reflection: https://math.stackexchange.com/questions/13261/how-to-get-a-reflection-vector
+* Ball to wall collision (Way 1): http://exploratoria.github.io/exhibits/mechanics/elastic-collisions-in-3d/
+* Ball to wall collision (Way 2): https://en.wikipedia.org/wiki/Elastic_collision
+* Phisical simulations: https://www.khanacademy.org/science/physics/linear-momentum/elastic-and-inelastic-collisions/a/what-are-elastic-and-inelastic-collisions
+
 ## Issues
 * When you set 1500 balls the GPU ball to ball collision sometimes becomes unstable (In this case you can switch to CPU and Back.)
 * With 1500 balls the average FPS is 20-30.
