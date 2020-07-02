@@ -20,7 +20,7 @@
 * The project need SDL2 OpemCL GLEW IMGUI for compiling.
 * This zip file contains the nececcery dependecies. You can mount the dependencies in a T drive with the script in the zip file.
 * (https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/dependencies.zip)
-* The Visual studio project configured for this dependeci pack and the T virtual Drive.
+* The Visual studio project configured for this dependecy pack and the T virtual Drive.
 
 ![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/Img02.jpg)
 
@@ -36,10 +36,11 @@
 * Then you can set the simulation box size.
 * Then you can set the balls number. [1-1500]
 * Then you can apply random XZ and Y ball start position. (Works after reset)
-* <b>The most importent is the RUN switch. Here you can START/STOP the simulation.<b>
+* <b>The most importent is the RUN switch. Here you can START/STOP the simulation.</b>
 * Then you can switch on/off the ball to ball collision.
 * Then you can reinitialise the simulation. (RESET)
 * Then you can switch on/off the small box.
+
 ![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/Img03.jpg)
 
 ## The virtual folders:
