@@ -50,11 +50,32 @@
 ![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/Img07.jpg)
 
 ## The Theoretical background:
+I stored the ball-s positions in float3 and their velocities in an another float3 vector. The new position is the position vector and the velocity vectors sum.
+I modelld the gravity vith an another float3 vector and i subtract the velocitiy vector with the gravity vector.
+I add an air resistance vector when slow down.
+```
+    glm::vec3 positions[numberOfBalls];
+    glm::vec3 velocities[numberOfBalls];
+    float resistance;
+
+    velocities[i] = velocities[i] - gravity;
+    velocities[i] = velocities[i] * resistance;
+    positions[i]  = positions[i] + velocities[i];
+    if (ballCollisionRun) ballCollision(i);
+    if(barrierIsOn) barrierCollision(i);
+    wallCollision(i);
+```
+
 ![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/collision.gif)
+
 ![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/mat1.jpg)
+
 ![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/math2.jpg)
+
 ![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/loop.jpg)
+
 ![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/mat3.jpg)
+
 ![](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/mat4.jpg)
 
 ### Used sources:
