@@ -2,6 +2,7 @@
 
 [![Rigid Body Simulation](https://github.com/SandorBalazsHU/elte-ik-gpgpu-rigid-body-simulation/blob/master/Images/Img01.jpg)](https://www.youtube.com/watch?v=ky2dFqLJdGQ)
 (Click the image for the video)
+(Video URL: https://youtu.be/ky2dFqLJdGQ)
 
 ## The main features:
 * Real time simulation with OpenGL (SDL2) wiev.
