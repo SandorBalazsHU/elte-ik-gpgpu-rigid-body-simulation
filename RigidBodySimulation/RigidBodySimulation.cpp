@@ -29,7 +29,7 @@ Uint32 fps_timer_callback(Uint32 interval, void* data)
 	const float iv = interval * 0.001f;
 
 	/* Note: the thread safety of printf is ambiguous across platforms */
-	printf("%.2f\tfps\n", f / iv);
+	//printf("%.2f\tfps\n", f / iv);
 
 	/* Reset frame counter */
 	SDL_AtomicSet(&frames, 0);

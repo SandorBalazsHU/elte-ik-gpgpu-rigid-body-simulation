@@ -41,13 +41,13 @@ void Simulation::Render() {
 		if (debug) std::cout << i << " - " << positions[i].x << ", " << positions[i].y << ", " << positions[i].z << std::endl;
 	}
 
-	//Looked PointBall Drawer
+	/*/Looked PointBall Drawer
 	glm::mat4 ballWorld = glm::translate(camera.getLookedPoint());
 	shader.SetUniform("world", ballWorld);
 	shader.SetUniform("worldIT", glm::transpose(glm::inverse(ballWorld)));
 	shader.SetUniform("MVP", camera.getProjectionViewMatrix() * ballWorld);
 	shader.SetUniform("Kd", glm::vec4(1.0f,0.0f,0.0f,1.0f));
-	ball->draw();
+	ball->draw();*/
 
 	//Clear the ball collision update checker
 	for (size_t i = 0; i < numberOfBalls; i++) collisionCheck[i] = true;
