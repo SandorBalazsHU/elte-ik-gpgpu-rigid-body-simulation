@@ -1,0 +1,6 @@
+<map id="Camera::keyboardDown" name="Camera::keyboardDown">
+<area shape="rect" id="node1" title="Event handler function for the key down event." alt="" coords="5,32,197,61"/>
+<area shape="rect" id="node2" href="$d1/df0/classCamera.html#adac494799213e0e0869ed69267d55636" title="Calculate camera coordinates from current spherical coordinates. &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;." alt="" coords="250,5,519,35"/>
+<area shape="rect" id="node4" href="$d1/df0/classCamera.html#a8a503c00dd7518935d87ce75707fbbb4" title="Calculate spherical coordinates from current camera coordinates. &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;." alt="" coords="245,59,524,88"/>
+<area shape="rect" id="node3" href="$d1/df0/classCamera.html#a42cda7239981a5618660d04bd5893556" title="Update viewMatrix from cameraPosition, lookedPoint and upwardDirection for apply changes." alt="" coords="572,5,707,35"/>
+</map>

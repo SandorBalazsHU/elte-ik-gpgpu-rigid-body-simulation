@@ -117,7 +117,7 @@
       </UndefinePreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>OpenCL.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;glew32.lib;glu32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -155,7 +155,7 @@
       </UndefinePreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -202,6 +202,7 @@
     <ClInclude Include="VertexArrayObject.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\DoxyGen\DoxyFile" />
     <None Include="BufferObject.inl" />
     <None Include="fragmentShader.frag" />
     <None Include="ProgramObject.inl" />

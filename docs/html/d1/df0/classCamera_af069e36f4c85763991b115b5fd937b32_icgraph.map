@@ -1,0 +1,8 @@
+<map id="Camera::sphericalCoordinateShift" name="Camera::sphericalCoordinateShift">
+<area shape="rect" id="node1" title="Shift the spherical coordinates." alt="" coords="579,32,837,61"/>
+<area shape="rect" id="node2" href="$d1/df0/classCamera.html#acda6ce3a67a71ef54eff748b75a41ec7" title="Event handler function for the mouse move event." alt="" coords="355,5,527,35"/>
+<area shape="rect" id="node5" href="$d1/df0/classCamera.html#a3db172a4b7fb2b50261724ce4ed44a99" title="Event handler function for the mouse wheel event." alt="" coords="352,59,531,88"/>
+<area shape="rect" id="node3" href="$d1/d7b/classSimulation.html#a11c060af37a612f7a0a31346d7a6ccc2" title=" " alt="" coords="113,5,301,35"/>
+<area shape="rect" id="node4" href="$d8/d7f/RigidBodySimulation_8cpp.html#a700a0caa5b70a06d1064e576f9f3cf65" title=" " alt="" coords="5,32,61,61"/>
+<area shape="rect" id="node6" href="$d1/d7b/classSimulation.html#a7195a0991da4d150a7b500a6877a1e41" title=" " alt="" coords="109,59,304,88"/>
+</map>

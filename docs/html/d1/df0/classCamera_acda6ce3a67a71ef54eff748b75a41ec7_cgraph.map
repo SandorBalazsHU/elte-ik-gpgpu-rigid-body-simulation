@@ -1,0 +1,6 @@
+<map id="Camera::mouseMove" name="Camera::mouseMove">
+<area shape="rect" id="node1" title="Event handler function for the mouse move event." alt="" coords="5,5,177,35"/>
+<area shape="rect" id="node2" href="$d1/df0/classCamera.html#af069e36f4c85763991b115b5fd937b32" title="Shift the spherical coordinates." alt="" coords="225,5,484,35"/>
+<area shape="rect" id="node3" href="$d1/df0/classCamera.html#adac494799213e0e0869ed69267d55636" title="Calculate camera coordinates from current spherical coordinates. &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;." alt="" coords="532,5,801,35"/>
+<area shape="rect" id="node4" href="$d1/df0/classCamera.html#a42cda7239981a5618660d04bd5893556" title="Update viewMatrix from cameraPosition, lookedPoint and upwardDirection for apply changes." alt="" coords="849,5,984,35"/>
+</map>

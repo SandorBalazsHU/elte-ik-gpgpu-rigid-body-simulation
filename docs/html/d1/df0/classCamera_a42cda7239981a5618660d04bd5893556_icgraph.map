@@ -1,0 +1,16 @@
+<map id="Camera::update" name="Camera::update">
+<area shape="rect" id="node1" title="Update viewMatrix from cameraPosition, lookedPoint and upwardDirection for apply changes." alt="" coords="1263,85,1397,114"/>
+<area shape="rect" id="node2" href="$d1/df0/classCamera.html#adac494799213e0e0869ed69267d55636" title="Calculate camera coordinates from current spherical coordinates. &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;." alt="" coords="945,85,1215,114"/>
+<area shape="rect" id="node3" href="$d1/df0/classCamera.html#ac14dd17934f0d33da007eee25292fb08" title="Event handler function for the key down event." alt="" coords="672,6,864,35"/>
+<area shape="rect" id="node6" href="$d1/df0/classCamera.html#a7bf40735443161c79a40764f837c2033" title="Set the camera position and the looked point." alt="" coords="697,85,839,114"/>
+<area shape="rect" id="node10" href="$d1/df0/classCamera.html#af069e36f4c85763991b115b5fd937b32" title="Shift the spherical coordinates." alt="" coords="639,191,897,221"/>
+<area shape="rect" id="node4" href="$d1/d7b/classSimulation.html#aca58050a45480fd3bb9917bc2110ed50" title=" " alt="" coords="109,59,320,89"/>
+<area shape="rect" id="node5" href="$d8/d7f/RigidBodySimulation_8cpp.html#a700a0caa5b70a06d1064e576f9f3cf65" title=" " alt="" coords="5,191,61,221"/>
+<area shape="rect" id="node7" href="$d1/df0/classCamera.html#a5c68f1ee8348320a6c47419ae2d724fb" title="The Camera class constructor." alt="" coords="407,31,551,61"/>
+<area shape="rect" id="node8" href="$d1/df0/classCamera.html#a1a23d75d5029537a763bc44ab985b7ac" title="Adapter function for the SetView." alt="" coords="368,85,591,114"/>
+<area shape="rect" id="node9" href="$d1/df0/classCamera.html#ac32f8d64d6303e1f197ae16dc50cafcf" title="Adapter function for the SetView." alt="" coords="381,138,578,167"/>
+<area shape="rect" id="node11" href="$d1/df0/classCamera.html#acda6ce3a67a71ef54eff748b75a41ec7" title="Event handler function for the mouse move event." alt="" coords="393,191,565,221"/>
+<area shape="rect" id="node13" href="$d1/df0/classCamera.html#a3db172a4b7fb2b50261724ce4ed44a99" title="Event handler function for the mouse wheel event." alt="" coords="390,245,569,274"/>
+<area shape="rect" id="node12" href="$d1/d7b/classSimulation.html#a11c060af37a612f7a0a31346d7a6ccc2" title=" " alt="" coords="121,191,309,221"/>
+<area shape="rect" id="node14" href="$d1/d7b/classSimulation.html#a7195a0991da4d150a7b500a6877a1e41" title=" " alt="" coords="117,245,312,274"/>
+</map>

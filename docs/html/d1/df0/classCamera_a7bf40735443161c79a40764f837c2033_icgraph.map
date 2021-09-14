@@ -1,0 +1,6 @@
+<map id="Camera::setView" name="Camera::setView">
+<area shape="rect" id="node1" title="Set the camera position and the looked point." alt="" coords="276,59,419,88"/>
+<area shape="rect" id="node2" href="$d1/df0/classCamera.html#a5c68f1ee8348320a6c47419ae2d724fb" title="The Camera class constructor." alt="" coords="45,5,189,35"/>
+<area shape="rect" id="node3" href="$d1/df0/classCamera.html#a1a23d75d5029537a763bc44ab985b7ac" title="Adapter function for the SetView." alt="" coords="5,59,228,88"/>
+<area shape="rect" id="node4" href="$d1/df0/classCamera.html#ac32f8d64d6303e1f197ae16dc50cafcf" title="Adapter function for the SetView." alt="" coords="18,112,215,141"/>
+</map>

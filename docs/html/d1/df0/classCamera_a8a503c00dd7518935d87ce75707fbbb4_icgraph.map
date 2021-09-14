@@ -1,0 +1,10 @@
+<map id="Camera::sphericalCoordinateUpdate" name="Camera::sphericalCoordinateUpdate">
+<area shape="rect" id="node1" title="Calculate spherical coordinates from current camera coordinates. &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;." alt="" coords="620,59,899,88"/>
+<area shape="rect" id="node2" href="$d1/df0/classCamera.html#ac14dd17934f0d33da007eee25292fb08" title="Event handler function for the key down event." alt="" coords="380,19,572,48"/>
+<area shape="rect" id="node5" href="$d1/df0/classCamera.html#a7bf40735443161c79a40764f837c2033" title="Set the camera position and the looked point." alt="" coords="405,85,547,115"/>
+<area shape="rect" id="node3" href="$d1/d7b/classSimulation.html#aca58050a45480fd3bb9917bc2110ed50" title=" " alt="" coords="115,5,326,35"/>
+<area shape="rect" id="node4" href="$d8/d7f/RigidBodySimulation_8cpp.html#a700a0caa5b70a06d1064e576f9f3cf65" title=" " alt="" coords="5,5,61,35"/>
+<area shape="rect" id="node6" href="$d1/df0/classCamera.html#a5c68f1ee8348320a6c47419ae2d724fb" title="The Camera class constructor." alt="" coords="149,59,293,88"/>
+<area shape="rect" id="node7" href="$d1/df0/classCamera.html#a1a23d75d5029537a763bc44ab985b7ac" title="Adapter function for the SetView." alt="" coords="109,112,332,141"/>
+<area shape="rect" id="node8" href="$d1/df0/classCamera.html#ac32f8d64d6303e1f197ae16dc50cafcf" title="Adapter function for the SetView." alt="" coords="122,165,319,195"/>
+</map>

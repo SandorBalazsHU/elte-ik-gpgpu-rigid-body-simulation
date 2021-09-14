@@ -1,0 +1,7 @@
+<map id="Camera::setCameraPosition" name="Camera::setCameraPosition">
+<area shape="rect" id="node1" title="Adapter function for the SetView." alt="" coords="5,32,228,61"/>
+<area shape="rect" id="node2" href="$d1/df0/classCamera.html#a7bf40735443161c79a40764f837c2033" title="Set the camera position and the looked point." alt="" coords="276,32,419,61"/>
+<area shape="rect" id="node3" href="$d1/df0/classCamera.html#adac494799213e0e0869ed69267d55636" title="Calculate camera coordinates from current spherical coordinates. &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;." alt="" coords="471,5,741,35"/>
+<area shape="rect" id="node5" href="$d1/df0/classCamera.html#a8a503c00dd7518935d87ce75707fbbb4" title="Calculate spherical coordinates from current camera coordinates. &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;." alt="" coords="467,59,745,88"/>
+<area shape="rect" id="node4" href="$d1/df0/classCamera.html#a42cda7239981a5618660d04bd5893556" title="Update viewMatrix from cameraPosition, lookedPoint and upwardDirection for apply changes." alt="" coords="793,5,928,35"/>
+</map>

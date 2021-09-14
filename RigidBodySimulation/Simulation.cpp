@@ -58,7 +58,7 @@ bool Simulation::Init() {
 	ball = ObjParser::parse("sphere.obj");
 
 	//Set Camera
-	camera.SetProj(45.0f, 640.0f / 480.0f, 0.01f, 1000.0f);
+	//camera.SetProj(45.0f, 640.0f / 480.0f, 0.01f, 1000.0f);
 
 	//Balls start initialisation
 	ballInit();
@@ -93,19 +93,19 @@ void Simulation::Clean() {
 
 //Update the Camera
 void Simulation::Update() {
-	camera.Update();
+	//camera.update();
 }
 
 void Simulation::KeyboardDown(SDL_KeyboardEvent& key) {
-	camera.KeyboardDown(key);
+	camera.keyboardDown(key);
 }
 
 void Simulation::KeyboardUp(SDL_KeyboardEvent& key) {
-	camera.KeyboardUp(key);
+	camera.keyboardUp(key);
 }
 
 void Simulation::MouseMove(SDL_MouseMotionEvent& mouse) {
-	camera.MouseMove(mouse);
+	camera.mouseMove(mouse);
 	if (barrierIsOn) {
 		if (mouse.state & SDL_BUTTON_RMASK) {
 			glm::vec3 shifted = barrierShift;
@@ -122,12 +122,12 @@ void Simulation::MouseDown(SDL_MouseButtonEvent& mouse) {}
 void Simulation::MouseUp(SDL_MouseButtonEvent& mouse) {}
 
 void Simulation::MouseWheel(SDL_MouseWheelEvent& wheel) {
-	camera.MouseWheel(wheel);
+	camera.mouseWheel(wheel);
 }
 
 void Simulation::Resize(int _w, int _h) {
 	glViewport(0, 0, _w, _h);
-	camera.Resize(_w, _h);
+	camera.resize(_w, _h);
 }
 
 float Simulation::random(float lower, float upper) {

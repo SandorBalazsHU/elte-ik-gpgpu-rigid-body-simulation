@@ -1,89 +1,202 @@
-/*
-	GPU accelerated rigid body simulation with OpenGL and OpenCL.
-	Created by: Sándor Balázs - it.sandor.balazs@gmail.com
-	AX400
-	---
-	Own camera implementation with sphere coordniates.
+/**
+ * @name Traffic Simulation.
+ * @file Camera.cpp
+ * @class Camera
+ * @author Sándor Balázs - AZA6NL
+ * @date 2021.05.02.
+ * @brief Camera implementation file with spherical coordinates.
+ * Contact: sandorbalazs9402@gmail.com
 */
 
 #include "Camera.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <set>
+#include <iostream>
 
-Camera::Camera(void) : m_eye(0.0f, 0.0f, 0.0f), m_at(0.0f), m_up(0.0f, 1.0f, 0.0f), m_goFw(0), m_goRight(0), m_eye_sphare(77.94228634f, 0.78539816f, 0.95531661f) {
-	SetView( glm::vec3(45,45,45), glm::vec3(0,0,0), glm::vec3(0,1,0));
-	m_dist = glm::length( m_at - m_eye );	
-	SetProj(45.0f, 640/480.0f, 0.001f, 1000.0f);
+/**
+ * @brief The Camera class constructor.
+ * Initialize the variables, set the view and the projection matrix.
+*/
+Camera::Camera(void) : cameraPosition(0.0f), lookedPoint(0.0f), upwardDirection(defaultUpwardVector), sphericalCameraPosition(0.0f) {
+	setView(defaultCameraPosition, defaultLookedPoint);
+	setProjection(angle, aspect, zNear, zFar);
 }
 
-Camera::Camera(glm::vec3 _eye, glm::vec3 _at, glm::vec3 _up) : m_goFw(0), m_goRight(0), m_dist(10) {
-	SetView(_eye, _at, _up);
-}
-
+/**
+ * @brief The Camera class destructor.
+ * Don't have function at the moment.
+*/
 Camera::~Camera(void) {}
 
-void Camera::SetView(glm::vec3 _eye, glm::vec3 _at, glm::vec3 _up) {
-	m_eye	= _eye;
-	m_up	= _up;
-
-	m_fw  = glm::normalize( m_at - m_eye  );
-	m_st = glm::normalize( glm::cross( m_fw, m_up ) );
-
-	m_dist = glm::length( m_at - m_eye );	
-
-	m_u = atan2f( m_fw.z, m_fw.x );
-	m_v = acosf( m_fw.y );
+/**
+ * @brief Set the camera position and the looked point.
+ * Generate the spherical coordinates from the sphere position and update the camera position.
+ * @param cameraPosition The settable camera position.
+ * @param lookedPoint The settable looked point.
+*/
+void Camera::setView(glm::vec3 camPos, glm::vec3 lookPoint) {
+	cameraPosition = camPos;
+	lookedPoint = lookPoint;
+	sphericalCoordinateUpdate();
+	cameraCoordinateUpdate();
 }
 
-void Camera::SetProj(float _angle, float _aspect, float _zn, float _zf) {
-	m_matProj = glm::perspective( _angle, _aspect, _zn, _zf);
-	m_matViewProj = m_matProj * m_viewMatrix;
+/**
+ * @brief Adapter function for the SetView.
+ * @param cameraPosition The settable camera position.
+*/
+void Camera::setCameraPosition(glm::vec3 camPos) {
+	setView(camPos, lookedPoint);
 }
 
-glm::mat4 Camera::GetViewMatrix() {
-	return m_viewMatrix;
+/**
+ * @brief Adapter function for the SetView.
+ * @param lookedPoint The settable looked point.
+*/
+void Camera::setLookedPoint(glm::vec3 lookPoint) {
+	setView(cameraPosition, lookPoint);
 }
 
-void Camera::Update() {
-	m_eye += (m_goFw*m_fw + m_goRight*m_st);
-	m_viewMatrix = glm::lookAt( m_eye, m_at, m_up);
-	m_matViewProj = m_matProj * m_viewMatrix;
+/**
+ * @brief Update viewMatrix from cameraPosition, lookedPoint and upwardDirection for apply changes.
+*/
+void Camera::update() {
+	viewMatrix = glm::lookAt(cameraPosition, lookedPoint, upwardDirection);
 }
 
-void Camera::SphereUpdate(float r, float a, float b) {
-	m_eye_sphare.x += r;
-	m_eye_sphare.y += b*-1.0f;
-	m_eye_sphare.z += a;
-	m_eye.x = m_eye_sphare.x * sinf(m_eye_sphare.y) * cosf(m_eye_sphare.z);
-	m_eye.z = m_eye_sphare.x * sinf(m_eye_sphare.y) * sinf(m_eye_sphare.z);
-	m_eye.y = m_eye_sphare.x * cosf(m_eye_sphare.y);
+/**
+ * \attention The camera z axis show upward! \n
+ * @brief Calculate camera coordinates from current spherical coordinates. \n
+ * \f$ sphericalCameraPosition.x = radius = r \f$ \n
+ * \f$ sphericalCameraPosition.y = inclination = \theta \f$ \n
+ * \f$ sphericalCameraPosition.z = azimuth = \varphi \f$ \n
+ * \f$ cameraPosition.x = r\cos{\varphi}\sin{\theta}+lookedPoint.x \f$ \n
+ * \f$ cameraPosition.z = r\sin{\varphi}\sin{\theta}+ lookedPoint.z \f$ \n
+ * \f$ cameraPosition.y = r\cos{\theta}+lookedPoint.y \f$ \n
+*/
+void Camera::cameraCoordinateUpdate() {
+	cameraPosition.x = (sphericalCameraPosition.x * sinf(sphericalCameraPosition.y) * cosf(sphericalCameraPosition.z)) + lookedPoint.x;
+	cameraPosition.z = (sphericalCameraPosition.x * sinf(sphericalCameraPosition.y) * sinf(sphericalCameraPosition.z)) + lookedPoint.z;
+	cameraPosition.y = (sphericalCameraPosition.x * cosf(sphericalCameraPosition.y)) + lookedPoint.y;
+	update();
 }
 
-void Camera::Resize(int _w, int _h) {
-	m_matProj = glm::perspective(	45.0f, _w/(float)_h, 0.01f, 1000.0f);
-	m_matViewProj = m_matProj * m_viewMatrix;
+/**
+ * \attention The camera z axis show upward! \n
+ * In this point we use the origo shifted camera coordinates \f$ origoCameraPosition = cameraPosition - lookedPoint \f$ \n
+ * Built in zero division prevention. \n
+ * @brief Calculate spherical coordinates from current camera coordinates. \n
+ * \f$ sphericalCameraPosition.x = radius = r = \sqrt{x^{2}+y^{2}+z^{2}} \f$ \n
+ * \f$ sphericalCameraPosition.y = inclination = \theta = \arccos{\frac{y}{r}} \f$ \n
+ * \f$ sphericalCameraPosition.z = azimuth = \varphi = \arctan{\frac{z}{x}} \f$ \n
+*/
+void Camera::sphericalCoordinateUpdate() {
+	glm::vec3 origoCameraPosition = cameraPosition - lookedPoint;
+	origoCameraPosition.x = (origoCameraPosition.x == 0.0f) ? 0.0001f : origoCameraPosition.x;
+	sphericalCameraPosition.x = sqrt((origoCameraPosition.x * origoCameraPosition.x) + (origoCameraPosition.y * origoCameraPosition.y) + (origoCameraPosition.z * origoCameraPosition.z));
+	sphericalCameraPosition.x = (sphericalCameraPosition.x == 0.0f) ? 0.0001f : sphericalCameraPosition.x;
+	sphericalCameraPosition.y = acosf(origoCameraPosition.y / sphericalCameraPosition.x);
+	sphericalCameraPosition.z = atanf(origoCameraPosition.z / origoCameraPosition.x);
 }
 
-void Camera::KeyboardDown(SDL_KeyboardEvent& key){}
-void Camera::KeyboardUp(SDL_KeyboardEvent& key){}
+/**
+ * @brief Shift the spherical coordinates. (with limitations)
+ * @param radius The spherical coordinates radius;
+ * @param azimuth The spherical coordinates azimuth;
+ * @param inclination The spherical coordinates inclination;
+*/
+void Camera::sphericalCoordinateShift(float radius, float azimuth, float inclination) {
+	sphericalCameraPosition.x += radius;
+	sphericalCameraPosition.y += inclination;
+	sphericalCameraPosition.z += azimuth;
+	//Limiters
+	if (sphericalCameraPosition.x < 1.0f) sphericalCameraPosition.x = 1.2f;
+	if (sphericalCameraPosition.y > 1.5f) sphericalCameraPosition.y = 1.499f;
+	if (sphericalCameraPosition.y < 0.02f) sphericalCameraPosition.y = 0.0211f;
+	cameraCoordinateUpdate();
+}
 
-void Camera::MouseMove(SDL_MouseMotionEvent& mouse) {
-	if ( mouse.state & SDL_BUTTON_LMASK ) {
-		SphereUpdate(0, mouse.xrel/100.0f, mouse.yrel/100.0f);
+/**
+ * @brief Calculate the projection matrix for the camera transformation.
+ * @param angle The view pyramid angle.
+ * @param aspect Te view aspect.
+ * @param zNear Near cutting plane.
+ * @param zFar Far cutting plane.
+*/
+void Camera::setProjection(float angle, float aspect, float zNear, float zFar) {
+	projectionMatrix = glm::perspective(angle, aspect, zNear, zFar);
+}
+
+/**
+ * @brief Camera projectionMatrix update function for the screen resize.
+ * @param width The OpenGL screen width.
+ * @param height The OpenGL screen height.
+*/
+void Camera::resize(int width, int height) {
+	aspect = ((float)width) / ((float)height);
+	setProjection(angle, aspect, zNear, zFar);
+}
+
+/**
+ * @brief Event handler function for the key down event.
+ * Store the pressed keys in the pressedKeys set.
+ * @param key keyboard down event.
+*/
+void Camera::keyboardDown(SDL_KeyboardEvent& key) {
+	float s = 0.5f;
+	pressedKeys.insert(key.keysym.sym);
+	for (int keyCode : pressedKeys) {
+		switch (keyCode) {
+		case SDLK_w:
+			lookedPoint.x += s;
+			cameraPosition.x += s;
+			break;
+		case SDLK_s:
+			lookedPoint.x -= s;
+			cameraPosition.x -= s;
+			break;
+		case SDLK_a:
+			lookedPoint.z += s;
+			cameraPosition.z += s;
+			break;
+		case SDLK_d:
+			lookedPoint.z -= s;
+			cameraPosition.z -= s;
+			break;
+		}
+	}
+	sphericalCoordinateUpdate();
+	cameraCoordinateUpdate();
+}
+
+/**
+ * @brief Event handler function for the key up event.
+ * Erase the key from the pressedKeys set.
+ * @param key keyboard up event.
+*/
+void Camera::keyboardUp(SDL_KeyboardEvent& key) {
+	pressedKeys.erase(key.keysym.sym);
+}
+
+/**
+* @brief Event handler function for the mouse move event.
+* @param key mouse move event.
+*/
+void Camera::mouseMove(SDL_MouseMotionEvent& mouse) {
+	if (mouse.state & SDL_BUTTON_LMASK) {
+		sphericalCoordinateShift(0, mouse.xrel / 200.0f, (mouse.yrel / 200.0f) * -1.0f);
 	}
 }
 
-void Camera::MouseWheel(SDL_MouseWheelEvent& wheel) {
-	// scroll up
+/**
+* @brief Event handler function for the mouse wheel event.
+* @param key mouse wheel event.
+*/
+void Camera::mouseWheel(SDL_MouseWheelEvent& wheel) {
 	if (wheel.y > 0) {
-		SphereUpdate(wheel.y*2.0f, 0, 0);
+		sphericalCoordinateShift(wheel.y * 1.5f, 0, 0);
 	}
-	// scroll down
 	else if (wheel.y < 0) {
-		SphereUpdate(wheel.y*2.0f, 0, 0);
+		sphericalCoordinateShift(wheel.y * 1.5f, 0, 0);
 	}
 }
-
-void Camera::LookAt(glm::vec3 _at) {
-	SetView(m_eye, _at, m_up);
-}
-

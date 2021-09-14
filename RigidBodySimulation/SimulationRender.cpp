@@ -17,6 +17,10 @@ void Simulation::Render() {
 	shader.Use();
 	shader.SetTexture("texImage", 0, texture);
 
+	shader.SetUniform("eye_pos", camera.getCameraPosition());
+	//shader.SetUniform("light_pos", camera.getCameraPosition());
+	//shader.SetUniform("Ls", camera.getCameraPosition());
+
 	//GPU Collision handler
 	if (run && GPU_isActive) Collision_GPU();
 
@@ -29,13 +33,21 @@ void Simulation::Render() {
 		glm::mat4 wallWorld = glm::translate(positions[i]);
 		shader.SetUniform("world", wallWorld);
 		shader.SetUniform("worldIT", glm::transpose(glm::inverse(wallWorld)));
-		shader.SetUniform("MVP", camera.GetViewProj() * wallWorld);
+		shader.SetUniform("MVP", camera.getProjectionViewMatrix() * wallWorld);
 		shader.SetUniform("Kd", colors[i]);
 		ball->draw();
 
 		//Debug messages
 		if (debug) std::cout << i << " - " << positions[i].x << ", " << positions[i].y << ", " << positions[i].z << std::endl;
 	}
+
+	//Looked PointBall Drawer
+	glm::mat4 ballWorld = glm::translate(camera.getLookedPoint());
+	shader.SetUniform("world", ballWorld);
+	shader.SetUniform("worldIT", glm::transpose(glm::inverse(ballWorld)));
+	shader.SetUniform("MVP", camera.getProjectionViewMatrix() * ballWorld);
+	shader.SetUniform("Kd", glm::vec4(1.0f,0.0f,0.0f,1.0f));
+	ball->draw();
 
 	//Clear the ball collision update checker
 	for (size_t i = 0; i < numberOfBalls; i++) collisionCheck[i] = true;
@@ -48,7 +60,7 @@ void Simulation::Render() {
 		glm::mat4 barrierWorld = glm::translate(barrierShift);
 		shader.SetUniform("world", barrierWorld);
 		shader.SetUniform("worldIT", glm::transpose(glm::inverse(barrierWorld)));
-		shader.SetUniform("MVP", camera.GetViewProj() * barrierWorld);
+		shader.SetUniform("MVP", camera.getProjectionViewMatrix() * barrierWorld);
 		shader.SetUniform("Kd", barrierColor);
 		barrier.Bind();
 		glDrawElements(GL_TRIANGLES, 32, GL_UNSIGNED_INT, 0);
@@ -59,7 +71,7 @@ void Simulation::Render() {
 	glm::mat4 wallWorld = glm::translate(glm::vec3(0, 0, 0));
 	shader.SetUniform("world", wallWorld);
 	shader.SetUniform("worldIT", glm::transpose(glm::inverse(wallWorld)));
-	shader.SetUniform("MVP", camera.GetViewProj() * wallWorld);
+	shader.SetUniform("MVP", camera.getProjectionViewMatrix() * wallWorld);
 	shader.SetUniform("Kd", wallColor);
 	wall.Bind();
 	glDrawElements(GL_TRIANGLES, 30, GL_UNSIGNED_INT, 0);

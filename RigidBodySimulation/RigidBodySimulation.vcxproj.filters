@@ -17,6 +17,9 @@
     <Filter Include="Kernel">
       <UniqueIdentifier>{f897a8e5-9623-4010-ba20-1e4866d17412}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DoxyGen">
+      <UniqueIdentifier>{d94cc82c-6be7-449c-aafd-d395b3258373}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RigidBodySimulation.cpp">
@@ -148,6 +151,9 @@
     </None>
     <None Include="Simulation.cl">
       <Filter>Kernel</Filter>
+    </None>
+    <None Include="..\DoxyGen\DoxyFile">
+      <Filter>DoxyGen</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -21,11 +21,27 @@ void exitProgram() {
 	std::cout << currentDateTime() << "- Program terminated correctly" << std::endl;
 }
 
+SDL_atomic_t frames;
+
+Uint32 fps_timer_callback(Uint32 interval, void* data)
+{
+	const float f = SDL_AtomicGet(&frames);
+	const float iv = interval * 0.001f;
+
+	/* Note: the thread safety of printf is ambiguous across platforms */
+	printf("%.2f\tfps\n", f / iv);
+
+	/* Reset frame counter */
+	SDL_AtomicSet(&frames, 0);
+
+	return interval;
+}
+
 int main(int argc, char* args[])
 {
 	//Logging to files.
-	freopen("simulation.log", "w", stdout);
-	freopen("error.log", "w", stderr);
+	//freopen("simulation.log", "w", stdout);
+	//freopen("error.log", "w", stderr);
 
 	//Exit Callback
 	atexit(exitProgram);
@@ -67,7 +83,7 @@ int main(int argc, char* args[])
 	}
 
 	//VSINC ON
-	SDL_GL_SetSwapInterval(1);
+	SDL_GL_SetSwapInterval(0);
 
 	//GLEW start
 	GLenum error = glewInit();
@@ -91,7 +107,6 @@ int main(int argc, char* args[])
 
 	//Base variables for the rander loop
 	bool quit = false;
-	SDL_Event event;
 	int fpsPlotCounter = 0;
 
 	Simulation simulation;
@@ -112,6 +127,13 @@ int main(int argc, char* args[])
 		return 1;
 	}
 
+	SDL_AddTimer(1000, fps_timer_callback, NULL);
+	//https://wiki.libsdl.org/SDL_atomic_t
+
+	const float SCREEN_FPS = 55.0f;
+	const float SCREEN_TICKS_PER_FRAME = 1000.0f / SCREEN_FPS;
+	//https://lazyfoo.net/tutorials/SDL/25_capping_frame_rate/index.php
+
 	//The render loop
 	while (!quit)
 	{
@@ -119,7 +141,7 @@ int main(int argc, char* args[])
 		fpsPlotCounter++;
 		if (fpsPlotCounter == 100) fpsPlotCounter = 0;
 		const Uint32 time = SDL_GetTicks();
-
+		SDL_Event event;
 		//Event processing loop
 		while (SDL_PollEvent(&event))
 		{
@@ -170,8 +192,20 @@ int main(int argc, char* args[])
 
 		//FPS Counter
 		const Uint32 last_time = SDL_GetTicks();
+
+		SDL_AtomicAdd(&frames, 1);
+
+		float frameTicks = last_time - time;
+		if (frameTicks < SCREEN_TICKS_PER_FRAME)
+		{
+			//Wait remaining time
+			SDL_Delay(SCREEN_TICKS_PER_FRAME - frameTicks);
+		}
+
+		//FPS Counter
+		const Uint32 last_time2 = SDL_GetTicks();
 		std::stringstream window_title;
-		float fps = 1000.0f / (last_time - time);
+		float fps = 1000.0f / (last_time2 - time);
 		window_title << "Rigid Body Simulation. FPS: " << fps;
 		simulation.fps[fpsPlotCounter] = fps;
 		SDL_SetWindowTitle(window, window_title.str().c_str());

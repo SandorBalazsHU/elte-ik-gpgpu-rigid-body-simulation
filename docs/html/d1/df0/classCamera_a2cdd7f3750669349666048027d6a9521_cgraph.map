@@ -1,0 +1,4 @@
+<map id="Camera::resize" name="Camera::resize">
+<area shape="rect" id="node1" title="Camera projectionMatrix update function for the screen resize." alt="" coords="5,5,135,35"/>
+<area shape="rect" id="node2" href="$d1/df0/classCamera.html#a3077ffe755b534d3fa32eb8dc8d05a38" title="Calculate the projection matrix for the camera transformation." alt="" coords="183,5,361,35"/>
+</map>

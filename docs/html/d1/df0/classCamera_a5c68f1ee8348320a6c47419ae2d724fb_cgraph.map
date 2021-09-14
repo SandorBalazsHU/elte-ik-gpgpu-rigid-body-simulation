@@ -1,0 +1,8 @@
+<map id="Camera::Camera" name="Camera::Camera">
+<area shape="rect" id="node1" title="The Camera class constructor." alt="" coords="5,32,149,61"/>
+<area shape="rect" id="node2" href="$d1/df0/classCamera.html#a3077ffe755b534d3fa32eb8dc8d05a38" title="Calculate the projection matrix for the camera transformation." alt="" coords="197,5,376,35"/>
+<area shape="rect" id="node3" href="$d1/df0/classCamera.html#a7bf40735443161c79a40764f837c2033" title="Set the camera position and the looked point." alt="" coords="215,59,358,88"/>
+<area shape="rect" id="node4" href="$d1/df0/classCamera.html#adac494799213e0e0869ed69267d55636" title="Calculate camera coordinates from current spherical coordinates. &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;." alt="" coords="429,32,698,61"/>
+<area shape="rect" id="node6" href="$d1/df0/classCamera.html#a8a503c00dd7518935d87ce75707fbbb4" title="Calculate spherical coordinates from current camera coordinates. &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;." alt="" coords="424,85,703,115"/>
+<area shape="rect" id="node5" href="$d1/df0/classCamera.html#a42cda7239981a5618660d04bd5893556" title="Update viewMatrix from cameraPosition, lookedPoint and upwardDirection for apply changes." alt="" coords="751,32,885,61"/>
+</map>
